@@ -1,0 +1,21 @@
+<div class="mx-auto main_works">
+    <div class="main_works_inside">
+        <h3 class="p-2 position-relative home-title">
+            Write your works accompanied by photos and videos.
+        </h3>
+        <h1 style="display: none;">Home!</h1>
+        <p class="mb-4 home_p">
+            Works is a free application for saving your works with attached photos, videos, and your resume.
+        </p>
+        <% if(login==false){ %>
+            <a href="/signup" class="btn btn-primary btn-lg m-auto" style="margin: auto;">Try Works,
+                it's
+                free</a>
+            <% }else{%>
+                <a href="/dashboard" class="btn btn-primary btn-lg mt-5" style="margin: auto;">Try Works,
+                    it's
+                    free</a>
+                <% }%>
+
+    </div>
+</div>

@@ -1,0 +1,186 @@
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
+  <div class="row mb-4">
+    <div class="col viewDiv">
+      <% if(locals.messageSuccess!='' ){ %>
+        <h5 class="text-success text-center px-2 mb-3 mt-0 message py-1">
+          <%= locals.messageSuccess %>
+        </h5>
+        <% } %>
+          <button id="back" class="btn btn-primary">Back</button>
+          <h3 class="viewTitle text-center m-auto shadow rounded-pill">View Work</h3>
+    </div>
+  </div>
+  <div>
+    <form action="/dashboard/addImages" method="post" enctype="multipart/form-data">
+      <div class="text-end">
+        <div class="d-flex justify-content-between mb-3">
+          <h6 class="text-start">
+            From: <a href="/<%= userParamsName %>">
+              <%= userFullName %>
+            </a> 's <a href="/<%= userParamsName %>/works">works</a>
+          </h6>
+          <% if(admin==true){ %>
+            <button type="button" id="edit" class="btn btn-primary d-inline">Edit</button>
+            <%}%>
+        </div>
+        <% if(admin==true){ %>
+          <input type="file" name="imagesNotes" multiple class="files edit"
+            accept="image/jpeg svg png jpg, application/pdf,video/mp3 mp4">
+          <%}%>
+            <div class="mb-4 form-group position-relative" style="left: 1px;top: 0px;right: 1px;">
+              <% if(admin==true){ %>
+                <div class="text-center edit">
+                  <label for="ltr" style="cursor: pointer">Left to Right</label>
+                  <% if(locals.direction=='ltr' ){ %>
+                    <input type="radio" name="direction" value="ltr" id="ltr" checked>
+                    <%}else{%>
+                      <input type="radio" name="direction" value="ltr" id="ltr">
+                      <%}%>
+                        <label for="rtl" style="cursor: pointer">Right to Left</label>
+                        <% if(locals.direction=='rtl' ){ %>
+                          <input type="radio" name="direction" value="rtl" id="rtl" checked>
+                          <%}else{%>
+                            <input type="radio" name="direction" value="rtl" id="rtl">
+                            <%}%>
+                              <p style="font-size: x-small;color: grey;text-align:center ;">Select text direction.
+                              </p>
+                </div>
+                <input type="text" name="title" id="title" class="form-control mb-0 p-1 fw-bold fs-4 text-center"
+                  placeholder="Title" aria-describedby="helpId" value="<%= title %>" />
+                <%}else{%>
+                  <input type="text" name="title" id="title"
+                    class="form-control mb-0 p-1 fw-bold border-0 fs-4 text-center" placeholder="Title"
+                    aria-describedby="helpId" disabled value="<%= title %>" />
+                  <%}%>
+            </div>
+            <% if(admin==true){ %>
+              <div class="text-center edit">
+                <label for="left" style="cursor: pointer">Left</label>
+                <% if(locals.align=='left' ){ %>
+                  <input type="radio" name="align" value="left" id="left" checked>
+                  <%}else{%>
+                    <input type="radio" name="align" value="left" id="left">
+                    <%}%>
+                      <label for="center" style="cursor: pointer">Center</label>
+                      <% if(locals.align=='center' ){ %>
+                        <input type="radio" name="align" value="center" id="center" checked>
+                        <%}else{%>
+                          <input type="radio" name="align" value="center" id="center">
+                          <%}%>
+                            <label for="right" style="cursor: pointer">Right</label>
+                            <% if(locals.align=='right' ){ %>
+                              <input type="radio" name="align" value="right" id="right" checked>
+                              <%}else{%>
+                                <input type="radio" name="align" value="right" id="right">
+                                <%}%>
+                                  <p style="font-size: x-small;color: grey;text-align:center ;">Select text alignment.
+                                  </p>
+              </div>
+              <%}%>
+                <div class="form-group mb-2 mt-0 position-relative" style="left: 1px;top: 15px;right: 1px;">
+                  <% if(admin==true){ %>
+                    <textarea name="body1" id="body1" cols="54" rows="6" class="fs-6 ps-2 w-100 rounded-1 body_work"
+                      value="<%= body1 %>"><%= body1 %></textarea>
+                    <%}else{%>
+                      <% if(locals.align=='left' ){ %>
+                        <textarea name="body1" id="body1" cols="54" rows="6" dir="ltr"
+                          class="fs-6 ps-2 w-100 rounded-1 text-start body_work" disabled
+                          value="<%= body1 %>"><%= body1 %></textarea>
+                        <%}%>
+                          <% if(locals.align=='center' ){ %>
+                            <textarea name="body1" id="body1" cols="54" rows="6"
+                              class="fs-6 ps-2 w-100 rounded-1 text-center body_work" disabled
+                              value="<%= body1 %>"><%= body1 %></textarea>
+                            <%}%>
+                              <% if(locals.align=='right' ){ %>
+                                <textarea name="body1" id="body1" cols="54" rows="6" dir="rtl"
+                                  class="fs-6 ps-2 w-100 rounded-1 text-end body_work" disabled
+                                  value="<%= body1 %>"><%= body1 %></textarea>
+                                <%}%>
+                                  <%}%>
+
+                </div>
+                <input type="hidden" name="_csrf" value={{token}}>
+                <input type="hidden" name="note_id" id="note_id" value="<%= note_id %>" />
+                <% if(admin==true){ %>
+                  <div class="" id="editFlex">
+                    <button type="submit" class="btn btn-primary updateWork">Update Work</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" id="deleteButton"
+                      data-bs-target="#deleteModal">Delete Work</button>
+                  </div>
+                  <%}%>
+      </div>
+    </form><br>
+
+    <%for(let i=0;i<groupImages1.length;i++){ %>
+      <div class="">
+        <% if(groupImages1[i]!='' ) {%>
+          <% if(groupImages1[i].mimetype=='application/pdf' ){%>
+            <iframe src="<%= groupImages1[i].path.slice(6) %>" width="98%" class="mb-3 text-center mx-auto"
+              height="1200px"></iframe>
+            <%}else if(groupImages1[i].mimetype!='video/mp4' && groupImages1[i].mimetype!='video/mp3' ){%>
+              <img src=" <%= groupImages1[i].path.slice(6) %>" alt="<%= groupImages1[i] %>"
+                class="mb-3 img-fluid img-thumbnail viewImages">
+              <%}else{%>
+                <video controls src=" <%= groupImages1[i].path.slice(6) %>" alt="<%= groupImages1[i] %>"
+                  class="mb-3 card-img img-fluid img-thumbnail"></video>
+                <%}%>
+
+                  <div class="d-flex justify-content-evenly">
+                    <form action="/dashboard/mainImage" method="post">
+                      <% if(admin==true){ %>
+                        <button type="submit" class="btn btn-primary edit">Main Image
+                        </button>
+                        <%}%>
+                          <input type="hidden" name="imagePath" value="<%= groupImages1[i].path %>"
+                            style="width: 900px;">
+                          <input type="hidden" name="note" value="<%= note_id %>" style="width: 900px;">
+                    </form>
+                    <form action="/dashboard/delImage" method="post">
+                      <% if(admin==true){ %>
+                        <button type="submit" class="btn btn-danger edit">Delete Image
+                        </button>
+                        <%}%>
+                          <input type="hidden" name="imagePath" value="<%= groupImages1[i].path %>"
+                            style="width: 900px;">
+                          <input type="hidden" name="note" value="<%= note_id %>" style="width: 900px;">
+                    </form>
+                  </div><br>
+
+                  <%}%>
+                    <%}%>
+
+      </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">You are about to delete a work.</h1>
+        <button type="button" class="btn-close text-bg-light" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This will delete your work <b class="fw-bold">
+            <%= title %>
+          </b><br>
+          Are you sure?
+
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <form action="/dashboard/item-delete/<%= noteID %>?_method=DELETE" method="POST" class="position-relative">
+          <div style="width: 10px;display: none;">
+            <input type="hidden" name="note_id" id="note_id" class="form-control border-0 fs-4" placeholder="Title"
+              aria-describedby="helpId" value="<%= note_id %>" />
+          </div>
+          <button type="submit" class="btn btn-primary">Delete Work</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/js/a.js"></script>

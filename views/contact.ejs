@@ -1,0 +1,35 @@
+<center class="contact">
+    <h1 class="d-none">contact!</h1>
+    <% if(locals.messageSuccess!='' ){ %>
+        <h5 class="text-success text-center px-2 mb-3 mt-0 message py-1">
+            <%= locals.messageSuccess %>
+        </h5>
+        <% } %>
+            <h3 class="text-center contact_title">You can contact us via this
+                email: </h3>
+            <form action="sendMessage" method="post" class="m-auto p-3 sendMessage">
+                <div class="form-group form-group1">
+                    <label for="from" class="form-label Message-label">From</label>
+                    <input type="email" name="from" class="p-1 mb-1 form-control d-inline w-25 input1"
+                        value="<%=locals.email%>" id="from" required placeholder="Your email">
+                </div>
+                <div class="form-group form-group1">
+                    <label for="to" class="form-label Message-label">To</label>
+                    <input type="email" name="to" class="p-1 mb-1 form-control d-inline w-25 input1"
+                        value="Director@nicemaths.com" id="to" required>
+                </div>
+                <div class="form-group form-group1">
+                    <label for="messageTitle" class="form-label Message-label">Title</label>
+                    <input type="text" name="messageTitle" class="p-1 mb-1 form-control d-inline w-25 input1" value=""
+                        required id="messageTitle">
+                </div>
+                <div class="form-group form-group1">
+                    <label for="to" class="form-label Message-label" id="Message-label-title">Message</label>
+                    <textarea name="message" class="px-2 mb-1 form-control d-inline input1" id="message" rows="5"
+                        required></textarea>
+                    <br>
+                    <center><button id="sendMessage" type="submit" class="btn btn-primary">Send</button></center>
+                </div>
+
+            </form>
+</center>

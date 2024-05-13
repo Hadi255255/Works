@@ -1,0 +1,48 @@
+<center>
+  <header class="header-main p-0" style="height: 36px; padding-top: 0;">
+    <% if(locals.login){ %>
+      <div class="back">
+        <ul id="headerDiv" class="nav">
+          <% }else{%>
+            <div class="back_2">
+              <ul id="headerDiv_2" class="nav">
+                <% } %>
+                  <li id="li_1"><a href="/" id="home" class="nav-link px-2 btn fw-bold headerItem">
+                      Home</a></li>
+                  <li id="li_2"><a href=" /users" id="users" class="nav-link px-2 btn headerItem">Users</a></li>
+                  <% if(locals.login){ %>
+                    <li id="li_3"><a href=" /<%=locals.paramsNameAdmin %>" id="profile"
+                        class="nav-link px-2 btn headerItem">Profile</a>
+                    </li>
+                    <li id="li_4"><a href=" /<%=locals.paramsNameAdmin %>/works" id="dashboard"
+                        class="nav-link px-2 btn headerItem">Dashboard</a>
+                    </li>
+                    <% } %>
+
+                      <li id="li_5"><a href=" /contact" type="button" id="contact"
+                          class="nav-link px-2 btn headerItem">Contact
+                          us</a>
+                      </li>
+                      <li id="li_6">
+                        <div class=" signDiv1" id="signDiv1">
+                          <% if(!locals.login){ %>
+                            <p class="signing nav-link btn headerItem" style="font-size: 22px;">Signing</p>
+                            <div id="signDiv" class="">
+                              <a href="/signup" type="button" class="btn bg-secondary-subtle sign">Sign Up</a><br />
+                              <a href="/signin" type="button" class="btn bg-primary-subtle sign ">Sign In</a><br />
+                              <a href="/auth/google" type="button" class="btn bg-secondary-subtle sign">Sign Up/In
+                                <img src="/img/g-logo.jpg" width="20px" id="g-logo" class='rounded-5' alt="">
+                              </a>
+                            </div>
+                            <% } %>
+                              <% if(locals.login){ %>
+                                <div id="logout">
+                                  <a href="/logout" type="button" class="nav-link signing btn headerItem">Logout</a>
+                                </div>
+                                <% } %>
+                        </div>
+                      </li>
+              </ul>
+            </div>
+  </header>
+</center>

@@ -1,0 +1,45 @@
+<h1 class="text-center">
+    <%=locals.firstName %>
+        <%=locals.lastName %>'s Resume
+</h1>
+<% if(locals.admin==true){%>
+    <% if(locals.messagesError!='' ){ %>
+        <h6 class="text-danger text-center border-danger border-1 p-1 mb-3 mt-0 message"
+            style="background-color: rgb(255, 245, 220);border-radius: 25px;border:1px solid crimson;box-shadow: 4px 4px 4px 4px rgb(255, 255, 98);width: 450px;margin: 0 auto;">
+            <%= locals.messagesError %>
+        </h6>
+        <% } %>
+            <% if(locals.messageSuccess!='' ){ %>
+                <h5 class="text-success text-center border-success border-1 p-1 px-3 mb-3 mt-0 message"
+                    style="background-color: rgb(255, 245, 220);border-radius: 25px;border:1px solid crimson;box-shadow: 4px 4px 4px 4px rgb(255, 255, 98);width: max-content;margin: 0 auto;">
+                    <%= locals.messageSuccess %>
+                </h5>
+                <% } %>
+                    <%}%>
+                        <div class="mb-2">
+                            <% if(locals.admin==true){%>
+                                <div class="">
+                                    <form action="uploadResumefile" method="post" enctype="multipart/form-data"
+                                        id="formResume" class="container">
+                                        <input type="file" name="resume" id="resume" accept="image/jpeg svg png jpg"
+                                            class="fs-6 p-0 w-100">
+                                        <div id="actionResume">
+                                            <input type="hidden" name="_csrf" value={{token}}>
+                                            <input type="submit" value="Save" class="save btn btn-success mb-3 mt-3">
+                                            <a href="/profile" class="btn-secondary btn cancel">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div><br>
+
+                                <%}%>
+                                    <a href="/<%=locals.paramsName %>/works"
+                                        class="btn btn-success position-relative m-2"
+                                        style="left: 7%; width:fit-content;display: inline;">Works</a>
+                                    <a href="/<%=locals.paramsName %>" class="btn btn-success position-relative m-2"
+                                        style="left: 7%; width:fit-content;display: inline;">Profile</a>
+                        </div>
+                        <div class="">
+                            <center><iframe id="pdf" src="<%= locals.resume %>" type="" width="98%"
+                                    class="mb-3 text-center mx-auto" height="1200px"></iframe>
+                            </center>
+                        </div>

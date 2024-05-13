@@ -1,0 +1,19 @@
+<div class="container-fluid footerDiv">
+    <footer class=" flex-wrap  bottom-0 footer">
+        <ul class="nav fs-6 text-center mb-3 hpd">
+            <li class="nav-item"><a href="/" class="nav-link ms-1 footer_a footer_home">Home</a>
+            </li>
+            <% if(locals.login){ %>
+                <li class="nav-item"><a href=" /<%=locals.paramsNameAdmin %>"
+                        class="nav-link ms-1 footer_a profile">Profile</a>
+                </li>
+                <li class="nav-item"><a href="/dashboard" class="nav-link ms-1 footer_a">Dashboard</a></li>
+                <% } %>
+                    <li class="nav-item"><a href="/users" id="users2" class="nav-link p-0 ms-1 mt-0 footer_a">Users</a>
+                    </li>
+                    <li class="nav-item"><a href="/contact" id="users2"
+                            class="nav-link p-0 ms-1 mt-0 footer_a footer_contact">Contact</a>
+                    </li>
+        </ul>
+    </footer>
+</div>

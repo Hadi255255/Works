@@ -1,0 +1,14 @@
+<div id="searchWorksDiv" class="">
+    <form id="formsearch" action=" /<%= locals.paramsName %>/works/result" method="post" class="formsearch">
+        <input id="searchTerm" type="search" name="searchTerm" class="form-control search" placeholder="Search...">
+        <input type="hidden" id="thisUserParamsName" name="thisUserParamsName" value="<%= locals.paramsName %>">
+        <input type="hidden" name="login" id="login" value="<%= locals.login %>">
+        <input type="submit" id="searchWorks" value="Search Works" style="display: inline;text-align: center;"
+            class="btn btn-primary"> <span>:</span>
+        <select name="works" id="works" class="rounded-2 p-2 bg-info-subtle">
+            <option id="allWorks" value="allWorks">All works</option>
+            <option id="myWorks" value="myWorks">My works</option>
+            <option id="thisUser" value="thisUser">User's works</option>
+        </select>
+    </form>
+</div>

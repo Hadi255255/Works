@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Confirmed Email</title>
+    </head>
+
+    <body>
+        <div class="text-center w-75 alertDiv" style="background-color: lightgreen;
+        border-radius:20px;margin:0 auto">
+            <h4 class="text-center alert">Confirmed <span class="text-danger-emphasis">
+                    <%= email %>
+                </span> successfully</h4>
+        </div>
+        <form action="" method="post">
+            <input type="hidden" name="_csrf" value={{token}}>
+        </form>
+
+
+    </body>
+
+    </div>
+
+</html>

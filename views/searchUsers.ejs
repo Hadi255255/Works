@@ -1,0 +1,16 @@
+<div id="searchUserDiv" class="">
+    <form action="/searchUsersResult" id="formsearch2" method="post" role="" class="formsearch"
+        style="width: fit-content;">
+        <input type="search" id="searchTerm2" name="searchTerm" class="form-control search" placeholder="Search...">
+        <input type="hidden" name="login2" id="login2" value="<%= locals.login %>">
+        <input type="submit" id="search2" value="Search Users" style="display: inline;text-align: center;"
+            class="btn btn-primary"> <span>by:</span>
+        <select name="kind" id="selectKind" class="rounded-2 p-2 bg-info-subtle">
+            <option value="fullName">Full Name</option>
+            <option value="email">Email</option>
+            <option value="speciality">Speciality</option>
+            <option value="education">Education</option>
+            <option value="skills">Skills</option>
+        </select>
+    </form>
+</div>

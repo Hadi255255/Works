@@ -1,0 +1,53 @@
+<div class="container-fluid container-fluid-custom pb-5 mb-5">
+  <div class="row mb-4">
+    <div class="col">
+      <div class="col d-flex justify-content-between align-items-center">
+        <h3 id="addNoteTitle" class="text-center bg-light-subtle shadow rounded-5">Add Note</h3>
+      </div>
+    </div>
+    <div>
+      <form action="/dashboard/add" method="POST" class="position-relative" enctype="multipart/form-data">
+        <div class="mb-0 form-group" style="width: 100%;">
+          <input type="file" name="images" multiple accept="image/jpeg svg png jpg mp4 gif vedio/mp4"
+            class="files fs-6 p-0">
+          <input type="hidden" name="_csrf" value={{token}}>
+          <div class="text-center">
+            <label for="ltr" style="cursor: pointer">Left to Right</label>
+            <% if(locals.direction=='left' ){ %>
+              <input type="radio" name="direction" value="ltr" id="ltr" checked>
+              <%}else{%>
+                <input type="radio" name="direction" value="ltr" id="ltr">
+                <%}%>
+                  <label for="rtl" style="cursor: pointer">Right to Left</label>
+                  <% if(locals.direction=='rtl' ){ %>
+                    <input type="radio" name="direction" value="rtl" id="rtl" checked>
+                    <%}else{%>
+                      <input type="radio" name="direction" value="rtl" id="rtl">
+                      <%}%>
+                        <p style="font-size: x-small;color: grey;text-align:center ;">Select text direction.
+                        </p>
+          </div>
+          <input type="text" name="title" id="titleNew" class="form-control fw-bold border-0 fs-4 text-center m-0"
+            placeholder="Title" aria-describedby="helpId" required />
+        </div>
+        <div class="text-center">
+          <label for="left" style="cursor: pointer">Left</label>
+          <input type="radio" name="align" value="left" id="left" checked>
+          <label for="center" style="cursor: pointer">Center</label>
+          <input type="radio" name="align" value="center" id="center">
+          <label for="right" style="cursor: pointer">Right</label>
+          <input type="radio" name="align" value="right" id="right">
+          <p style="font-size: x-small;color: grey;text-align:center ;">Select text alignment.
+          </p>
+        </div>
+        <div class="form-group my-3" style="width: 100%;">
+          <textarea name="body1" id="bodyNew" cols="30" rows="3" class="form-control fs-5" required>
+        </textarea>
+        </div>
+        <div class=" form-group">
+          <button type="submit" class="btn btn-primary btn-lg" style="margin-left: 50%;transform: translateX(-50%);">+
+            Add
+            Note</button>
+        </div>
+      </form>
+    </div>

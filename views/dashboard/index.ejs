@@ -1,0 +1,321 @@
+<% if(admin==true){%>
+  <h1 style="display: none;">dashboard!</h1>
+  <% } %>
+    <div class=" dash">
+      <div class="container-fluid sec1">
+        <div class="m-0" style="height: min-content;">
+          <% if(admin==true){ %>
+            <div class="" style="height: min-content;">
+              <div class="hey_count">
+                <span class="hey mx-4 hi">Hey <%= locals.userName %>
+                </span>
+                <span class="text-center mx-5 hey count" style="padding: 5px 10px">
+                  Count: <%=works.length %>
+                </span>
+              </div>
+              <% if(locals.messageInform!='' ){ %>
+                <h5 class="text-bg-info inform px-3 py-1 mb-0 mx-auto my-0" style="border-radius: 25px;">
+                  <%= locals.messageInform %>
+                </h5>
+                <% } %>
+                  <% if(locals.messageSuccess!='' ){ %>
+                    <h5 class="text-success text-center px-2 mb-3 mt-0 message py-1">
+                      <%= locals.messageSuccess %>
+                    </h5>
+                    <% } %>
+            </div>
+            <% } else{ %>
+              <% if(searchResults!=false){ %>
+                <button type="button" onclick="history.back()" class="btn btn-primary ms-5 mb-2">Back</button>
+                <%}%>
+                  <h4 class="text-center rounded-4 m-auto titleWork">
+                    <% if(searchResults!=false){ %>
+                      Search Results in: <br>
+                      <%}%>
+                        <%= name %>' Works <br>
+                          Count: <%= works.length%>
+                  </h4>
+
+                  <% if(locals.paramsName!='users' ){ %>
+                    <div class="ms-5 mb-2">
+                      <a href="/<%=locals.paramsName %>" class="btn btn-success ">Profile</a>
+                    </div>
+                    <%}%>
+                      <%}%>
+                        <% if(notes.length==0){%>
+                          <%}%>
+        </div><br>
+        <% if(admin==true){ %>
+          <div class="col text-end mb-5 new_delete_sort">
+            <a href="/<%=locals.paramsName %>/works/add" class="btn btn-primary newwork">+ New Work</a>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" id="deleteButton"
+              data-bs-target="#deleteModal">Delete all works</button>
+            <form action="sort" method="post" class="sort">
+              <label for="newest" id="newest_label" style="cursor: pointer">Sort by newest</label>
+              <% if(locals.orderWorks=='newest' ){ %>
+                <input type="radio" name="sort" value="newest" id="newest" checked>
+                <%}else{%>
+                  <input type="radio" name="sort" value="newest" id="newest">
+                  <%}%>
+                    <label for="oldest" style="cursor: pointer">Sort by oldest</label>
+                    <% if(locals.orderWorks=='oldest' ){ %>
+                      <input type="radio" name="sort" value="oldest" id="oldest" checked>
+                      <%}else{%>
+                        <input type="radio" name="sort" value="oldest" id="oldest">
+                        <%}%>
+                          <button type="submit" class="btn btn-primary submit">Submit</button>
+                          <p class="comment">The work becomes the newest
+                            when
+                            it
+                            is
+                            updated.
+                          </p>
+            </form>
+          </div>
+          <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">You are about to delete all your works.</h1>
+                  <button type="button" class="btn-close text-bg-light" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>
+                    This will delete all your works. <b class="fw-bold">
+                    </b><br>
+                    Are you sure?
+
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <form action="/dashboard/items-delete?_method=DELETE" method="POST" class="position-relative">
+                    <button type="submit" class="btn btn-primary">Delete Works</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%}%>
+      </div>
+      <div class="row allnotes m-auto">
+        <% if(notes.length>0){for(var i=0;i<notes.length;i++){ %>
+            <div class="mb-4 thenotes">
+              <div class="note">
+                <div class="card border-primary">
+                  <a href="/<%= notes[i].userParamsName %>/works/<%= notes[i]._id %>"
+                    class="card-body text-decoration-none note_a">
+                    <% if(notes[i].direction=='ltr' ){ %>
+                      <h6 class="card-title text-center" dir="ltr">
+                        <%= notes[i].title.slice(0,49) %>
+                          <% if(notes[i].title.length>49){ %>
+                            ...
+                            <%}%>
+                      </h6>
+                      <%}else{%>
+                        <h6 class="card-title text-center" style="height: 20px;" dir="rtl">
+                          <%= notes[i].title.slice(0,49) %>
+                            <% if(notes[i].title.length>49){ %>
+                              ...
+                              <%}%>
+                        </h6>
+                        <%}%>
+                          <hr>
+                          <% if(notes[i].align=='left' ){ %>
+                            <% if(notes[i].direction=='ltr' ){ %>
+                              <p class="card-text text-start workbody" dir="ltr">
+                                <%= notes[i].body.slice(0,99) %>
+                                  <% if(notes[i].body.length>99){ %>
+                                    ...
+                                    <%}%>
+                              </p>
+                              <%}else{%>
+                                <p class="card-text text-start workbody" dir="rtl">
+                                  <%= notes[i].body.slice(0,99) %>
+                                    <% if(notes[i].body.length>99){ %>
+                                      ...
+                                      <%}%>
+                                </p>
+                                <%}%>
+                                  <%}%>
+                                    <% if(notes[i].align=='center' ){ %>
+                                      <% if(notes[i].direction=='ltr' ){ %>
+                                        <p class="card-text text-center workbody " dir="ltr">
+                                          <%= notes[i].body.slice(0,99) %>
+                                            <% if(notes[i].body.length>99){ %>
+                                              ...
+                                              <%}%>
+                                        </p>
+                                        <%}else{%>
+                                          <p class="card-text text-center workbody" dir="rtl">
+                                            <%= notes[i].body.slice(0,99) %>
+                                              <% if(notes[i].body.length>99){ %>
+                                                ...
+                                                <%}%>
+                                          </p>
+                                          <%}%>
+                                            <%}%>
+                                              <% if(notes[i].align=='right' ){ %>
+                                                <% if(notes[i].direction=='rtl' ){ %>
+                                                  <p class="card-text text-end workbody" dir="rtl">
+                                                    <%= notes[i].body.slice(0,99) %>
+                                                      <% if(notes[i].body.length>99){ %>
+                                                        ...
+                                                        <%}%>
+                                                  </p>
+                                                  <%}else{%>
+                                                    <p class="card-text text-end workbody" dir="ltr">
+                                                      <%= notes[i].body.slice(0,99) %>
+                                                        <% if(notes[i].body.length>99){ %>
+                                                          ...
+                                                          <%}%>
+                                                    </p>
+                                                    <%}%>
+                                                      <%}%>
+
+                                                        <div class="image">
+                                                          <% if(notes[i].image){ %>
+                                                            <% if(notes[i].firstFileType=='application/pdf' ){%>
+                                                              <iframe src="<%= notes[i].image %>"
+                                                                class="mb-3 mx-auto viewImages" height="220px"
+                                                                width="84%" style="">
+                                                              </iframe>
+                                                              <%}else if(notes[i].firstFileType !='video/mp4' &&
+                                                                notes[i].firstFileType!='video/mp3' ){%>
+                                                                <img id="" src='<%= notes[i].image %>'
+                                                                  class="img-thumbnail viewImagesSmall viewImages"
+                                                                  alt="<%= notes[i].image %>">
+                                                                <%}else{%>
+                                                                  <video controls src=" <%= notes[i].image %>"
+                                                                    alt="<%= notes[i].image%>"
+                                                                    class="mb-5 card-img img-fluid img-thumbnail"></video>
+
+                                                                  <%}%>
+                                                                    <%}%>
+                                                        </div>
+
+                                                        <p class="card-text py-2 position-absolute bottom-0 mx-auto">
+                                                          <% if(searchResults==false){%>
+                                                            <%= notes[i].updatedAt.slice(0,10)%> (Time: <%=
+                                                                notes[i].updatedAt.slice(11,-5) %>)
+                                                                <%}else{%>
+                                                                  <%= String(notes[i].updatedAt).slice(0,15) %>(Time:
+                                                                    <%= String(notes[i].updatedAt).slice(15,-33) %>)
+                                                                      <%}%>
+                                                        </p>
+
+                  </a>
+                </div>
+              </div>
+              <% if(searchResults!=false){ %>
+                <h6 class="text-center mt-2">
+                  <a href="/<%= notes[i].userParamsName %>">
+                    <%= notes[i].userFullName %>
+                  </a>'s <a href="/<%= notes[i].userParamsName %>/works">Works
+                  </a>
+                </h6>
+                <%}%>
+            </div>
+            <% }} else{ %>
+              <div class="row fatherdoor" style="position: relative;top: 0px;">
+                <div class="door">
+                  <div class="circle1">
+                    <div class="circle2"></div>
+                  </div>
+                </div>
+                <img src="/img/boy.png" alt="star" class="boy" style="width: 150px;border-radius:20px;">
+                <% if(locals.confirmed=='true' && admin==true ){ %>
+                  <div class="okey">
+                    <h2 class="text-success text-center lets">Okey</h2>
+                    <h4 class="lets">Let's start with the first work. <br><br>
+                      <a href="/dashboard/add">Create one!</a>
+                    </h4>
+                  </div>
+                  <% } else if(locals.confirmed=='false' && admin==true){ %>
+                    <div class="py-0 attention okey">
+                      <h3 class="text-danger">Pay attention: </h3>
+                      <h6 class="text-wrap">You have to confirm your email by clicking the link which has been sent.
+                      </h6>
+                      <h6> <a href="/sendlink" id="sendlink" class="">Resend a confirmation's link</a></h6>
+                    </div>
+                    <% } else if(searchResults==false){ %>
+                      <div class="w-auto" style="position: relative;top: 50px;">
+                        <h2 class="">No works yet.</h2>
+                      </div>
+                      <% }else{ %>
+                        <div class="okey w-auto" style="position: relative;top: 50px;height: fit-content;">
+                          <h2 class="">No results found.</h2>
+                        </div>
+                        <% } %>
+              </div>
+              <% } %>
+      </div>
+      <% if(notes.length>0 && searchResults==false) {%>
+        <div style="margin-top: 50px;display: block;">
+          <nav aria-label="Page navigation example bg-black" class="paginationDiv">
+            <ul class="pagination justify-content-center mt-5">
+              <% if(current==1) {%>
+                <li class="page-item"><a class="page-link text-center" href="#">First</a></li>
+                <%} else {%>
+                  <% if(locals.paramsName=='users' ){ %>
+                    <li class="page-item"><a class="page-link"
+                        href="/dashboard/?page=<%= Number(current)-1%>">Previous</a>
+                    </li>
+                    <%}else{ %>
+                      <li class="page-item"><a class="page-link"
+                          href="/<%=locals.paramsName %>/works/?page=<%= Number(current)-1 %>">Previous</a>
+                      </li>
+                      <%}%>
+                        <%}%>
+                          <% var i=(Number(current)>5? Number(current)-4:1) %>
+                            <% if(i !==1){ %>
+                              <li class="page-item text-center"><a class="page-link" href="#">...</a></li>
+                              <% } %>
+
+                                <% for(; i <(Number(current)+4) && i <=pages; i++) { %>
+                                  <% if(i==current) { %>
+                                    <li class="page-item text-center"><a
+                                        class="page-link text-center bg-secondary-subtle" href="#">
+                                        <%= i %>
+                                      </a></li>
+                                    <% } else { %>
+                                      <% if(locals.paramsName=='users' ){ %>
+                                        <li class="page-item text-center"><a class="page-link text-center"
+                                            href="/dashboard/?page=<%= i %>">
+                                            <%= i %>
+                                          </a></li>
+                                        <%}else{ %>
+                                          <li class="page-item text-center"><a class="page-link text-center"
+                                              href="/<%=locals.paramsName %>/works/?page=<%= i %>">
+                                              <%= i %>
+                                            </a></li>
+                                          <%}%>
+
+                                            <% } %>
+                                              <% if(i==Number(current)+4 && i < pages) { %>
+                                                <li class="page-item text-center"><a class="page-link" href="#">...</a>
+                                                </li>
+                                                <% } %>
+                                                  <% } %>
+                                                    <% if(current==pages) { %>
+                                                      <li class="page-item"><a class="page-link text-center"
+                                                          href="#">Last</a>
+                                                      </li>
+                                                      <% } else{ %>
+                                                        <% if(locals.paramsName=='users' ){ %>
+                                                          <li class="page-item"><a class="page-link text-center"
+                                                              href="/dashboard/?page=<%= Number(current)+1 %>">Next</a>
+                                                          </li>
+                                                          <%}else{ %>
+                                                            <li class="page-item"><a class="page-link text-center"
+                                                                href="/<%=locals.paramsName %>/works/?page=<%= Number(current)+1 %>">Next</a>
+                                                            </li>
+                                                            <%}%>
+                                                              <% } %>
+            </ul>
+          </nav>
+        </div>
+        <% } %>
+    </div>
+    <script src="/js/a.js"></script>
