@@ -14,6 +14,7 @@
     "auth": "^0.0.9",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cloudinary": "^2.2.0",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
@@ -42,7 +43,8 @@
     "parser": "^0.1.4",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "uploader": "^3.48.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

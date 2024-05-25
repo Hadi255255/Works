@@ -5,14 +5,13 @@
             <% if(locals.messagesError!='' || locals.messageSuccess!='' || locals.messageInform!='' ){ %>
                 <div class="allmessages">
                     <% if(locals.messagesError!='' ){ %>
-                        <h6 class="text-danger text-center border-danger border-1 py-1 px-3 message position-relative"
-                            style="">
+                        <h6 class="text-danger text-center border-danger border-1 py-1 px-3 message position-relative">
                             <%= locals.messagesError %>
                         </h6>
                         <% } %>
                             <% if(locals.messageSuccess!='' ){ %>
-                                <h5 class="text-success text-center border-success border-1 py-1 px-3 message position-relative success"
-                                    style="">
+                                <h5
+                                    class="text-success text-center position-relative success bg-secondary-subtle mx-auto">
                                     <%= locals.messageSuccess %>
                                 </h5>
                                 <% } %>
@@ -96,7 +95,7 @@
                                         <label for="firstName" class="form-label">First
                                             Name</label>
                                         <input type="text" name="firstName" id="firstName"
-                                            value="<%= locals.firstName %>"
+                                            value="<%= locals.firstName %>" autocomplete="additional-name"
                                             class="p-1 mb-1 form-control d-inline w-50 input1"
                                             aria-describedby="helpId">
                                     </div>
@@ -104,21 +103,22 @@
                                         <label for="lastName" class="form-label">Last
                                             Name</label>
                                         <input type="text" name="lastName" id="lastName" value="<%= locals.lastName %>"
-                                            class="p-1  mb-1 form-control d-inline w-50 input1">
+                                            class="p-1  mb-1 form-control d-inline w-50 input1"
+                                            autocomplete="additional-name">
                                     </div>
                                     <div class=" form-group form-group1">
-                                        <label for="lastName" class="form-label">Email</label>
+                                        <label for="email" class="form-label">Email</label>
                                         <input type="email" name="email" id="email" value="<%= locals.email %>" required
                                             class="p-1  mb-1 form-control d-inline w-50 input1"
-                                            aria-describedby="helpId">
+                                            aria-describedby="helpId" autocomplete="additional-name">
                                         <p id="alertEmail" class="text-secondary mb-0 text-danger">
                                         </p>
                                     </div>
                                     <% if(locals.password){ %>
                                         <div class="form-group form-group1">
-                                            <label for="password" class="form-label">Password</label>
+                                            <label for="password" class="form-label">Password<span id="showProfile"
+                                                    class="">👁</span></label>
                                             <input type="password" name="password" id="password" minlength="6"
-                                                placeholder="Leave the field blank if you do not want to change your password."
                                                 class="p-1  mb-1 form-control d-inline w-50 input1"
                                                 aria-describedby="helpId">
                                             <p id="alertPassword" class="text-secondary mb-0 text-danger"
@@ -135,24 +135,24 @@
                                                 <input type="text" name="speciality" id="speciality"
                                                     value="<%= locals.speciality %>"
                                                     class="p-1 mb-1 form-control d-inline input1"
-                                                    aria-describedby="helpId">
+                                                    aria-describedby="helpId" autocomplete="additional-name">
                                             </div>
                                             <div class="form-group form-group1">
                                                 <label for="education" class="form-label">Education</label>
                                                 <input type="text" name="education" id="education"
                                                     value="<%= locals.education %>"
                                                     class="p-1 mb-1 form-control d-inline w-50 input1"
-                                                    aria-describedby="helpId">
+                                                    aria-describedby="helpId" autocomplete="additional-name">
                                             </div>
                                             <div class="form-group form-group1">
                                                 <label for="skills" class="form-label skills_label">Skills</label>
-                                                <textarea type="text" name="skills"
+                                                <textarea type="text" name="skills" id="skills"
                                                     class="p-1 mb-1 form-control input1 skills d-inline w-50"
                                                     rows="4"><%= locals.skills %></textarea>
 
                                             </div>
                                             <div class="form-group form-group1">
-                                                <label for="confirmed" class="form-label confirmed_label">Confirmed
+                                                <label class="form-label confirmed_label">Confirmed
                                                     Email</label>
                                                 <% if(locals.confirmed=='true' ){ %>
                                                     <p id="confirmed" class="p-1 mb-1" disabled>
@@ -178,8 +178,9 @@
                                                 <input type="date" name="birthday" id="birthday"
                                                     class="p-1 mb-1 form-control d-inline w-50 input1"
                                                     aria-describedby="helpId"><br>
-                                                <label for="" class="form-label"></label>
-                                                <input type="text" disabled value="<%= locals.birthday %>"
+                                                <label for="birthdayShow" class="form-label"></label>
+                                                <input type="text" disabled id="birthdayShow"
+                                                    value="<%= locals.birthday %>"
                                                     class="p-1 mb-1 form-control d-inline w-50 input1"
                                                     aria-describedby="helpId" style="font-size: x-small;">
 
@@ -252,8 +253,10 @@
                                                     value="<%= locals.location %>" aria-describedby="helpId">
                                             </div>
                                             <div class="form-group form-group1">
-                                                <input type="submit" id="update" value="Update"
-                                                    class="btn btn-primary mt-1 mb-2">
+                                                <a href="#password">
+                                                    <input type="submit" id="update" value="Update"
+                                                        class="btn btn-primary mt-1 mb-2">
+                                                </a>
                                             </div>
                                             <% if(locals.confirmed!='true' ){ %>
                                                 <a href="/sendlink" id="sendlink1">Resend a

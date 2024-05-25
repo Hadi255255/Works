@@ -52,6 +52,16 @@ const NoteSchema = new Schema({
     direction: {
         type: String,
         default: 'ltr',
+    },
+    links: {
+        type: {
+            linkTitle: [],
+            linkValue: [],
+        },
+        default: {
+            linkTitle: [],
+            linkValue: [],
+        }
     }
 })
 

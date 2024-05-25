@@ -82,7 +82,7 @@ h6 {
 .footer li {
     text-align: center;
     margin-right: 2px;
-    width: 16vw !important;
+    width: 10vw !important;
     min-width: 90px;
 }
 
@@ -175,6 +175,7 @@ h6 {
     font-weight: bold;
     border-radius: 15px;
     width: fit-content;
+    max-width: 50vw;
     margin: auto;
     padding: 0 15px;
     position: relative;
@@ -297,15 +298,35 @@ h6 {
     left: 3px;
 }
 
+@keyframes shine {
+
+    0%,
+    100% {
+        box-shadow: 0 0 14px 14px rgb(255, 255, 100);
+    }
+
+    50% {
+        box-shadow: 0 0 10px 10px rgb(255, 255, 100);
+    }
+}
+
 .main_works {
+    animation: shine 8s ease-out infinite;
+    background-image: url('../img/logos.png');
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    background-position: 50% 2%;
     text-align: center;
     position: relative;
     width: 60vw;
     top: 0px;
     height: min-content;
-    padding: 20px;
-    border: 1px grey solid;
-    border-radius: 40px;
+    padding: 10px 10px;
+    padding-top: 100px;
+    /* border: 4px grey double; */
+    border-radius: 45% 45% 10px 10px;
+    outline: rgb(0, 40, 0) 10px double;
+    box-shadow: 0 0 15px 15px rgb(255, 255, 100);
 }
 
 .main_works a {
@@ -350,6 +371,11 @@ h6 {
 .note_a {
     max-height: 100%;
     height: min-content;
+}
+
+.note div a {
+    /* background-color: red !important; */
+    border-radius: 8px;
 }
 
 .card {
@@ -739,14 +765,13 @@ td:first-of-type:not(.notes) {
     box-shadow: 3px 3px 10px darkblue !important;
 }
 
-.message {
+.messageViewnotes {
     background-color: rgb(200, 200, 200);
     border-radius: 25px;
     border: 1px solid black;
     width: 100%;
     margin: 0 auto;
     animation: show 1s linear;
-    width: 450px;
     box-shadow: 3px 3px 10px black;
 }
 
@@ -755,20 +780,15 @@ td:first-of-type:not(.notes) {
     max-height: 100px;
 }
 
-.image {
+.image:not(.viewImagesSmall, .viewImages) {
     margin: 0 auto !important;
-    width: 220px;
-}
-
-.viewImagesSmall {
-    max-height: 180px;
+    /* width: 220px; */
 }
 
 .viewImages {
     max-width: 100%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    display: block;
+    margin: 0 auto;
     border-radius: 10px;
     transition: all 1s linear;
     cursor: pointer;
@@ -776,13 +796,21 @@ td:first-of-type:not(.notes) {
     font-size: 14px;
 }
 
+.viewImagesSmall {
+    /* max-height: 180px; */
+    display: block;
+    width: 100% !important;
+    position: relative;
+    left: 0 !important;
+    margin-bottom: 40px;
+}
+
 .viewImages:hover {
     background-color: darkgoldenrod;
-    transform: translateX(-50%) scale(150%);
 }
 
 .viewImages:active {
-    transform: translateX(-50%) scale(200%);
+    transform: scale(120%);
 }
 
 .iframe {
@@ -891,7 +919,6 @@ td:first-of-type:not(.notes) {
 }
 
 .edit label {
-    /* background-color: red !important; */
     width: fit-content;
 }
 
@@ -911,18 +938,21 @@ td:first-of-type:not(.notes) {
     font-size: small;
     padding: 5px 5px !important;
     height: fit-content;
-    width: fit-content;
 
 }
 
 #editFlex {
     width: max-content;
-    column-gap: 5vw;
-    grid-template-columns: 1fr 1fr;
+    column-gap: 1vw;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .btn {
     padding: 3px 8px;
+}
+
+.viewDiv {
+    height: fit-content;
 }
 
 option,
@@ -1030,6 +1060,7 @@ input:disabled:not(.body_work, #title) {
 }
 
 #addNoteTitle {
+    height: fit-content;
     margin: auto;
     margin-bottom: 70px;
     width: 75%;
@@ -1078,6 +1109,93 @@ input:disabled:not(.body_work, #title) {
 
 #image {
     max-width: 100%;
+}
+
+.viewTitle {
+    box-shadow: 2px 2px 8px grey;
+}
+
+.newwork label {
+    width: fit-content;
+    margin-left: 10px;
+}
+
+#titleNew::placeholder,
+#title::placeholder {
+    color: rgb(180, 180, 180);
+}
+
+#titleNew,
+#title {
+    border: 1px solid lightgrey !important;
+}
+
+#show,
+#show1,
+#showProfile {
+    /* color: black; */
+    width: fit-content;
+    position: relative;
+    left: -15px;
+    top: -7px;
+    float: right;
+    cursor: pointer;
+    border-radius: 30%;
+    /* background-color: grey; */
+    user-select: none;
+    padding-bottom: 20px;
+    font-size: x-large;
+    height: 35px;
+}
+
+#show:active,
+#show1:active {
+    transform: scale(95%);
+}
+
+.links {
+    background-color: lightgrey;
+    text-align: left;
+    padding: 1px 10px;
+    border-radius: 15px;
+    border: 1px lightgrey solid;
+    margin-bottom: 10px;
+    width: max-content;
+}
+
+.links:last-of-type {
+    margin-bottom: 40px;
+}
+
+#bodyNewDiv .links:first-of-type {
+    margin-top: 20px;
+}
+
+#back {
+    position: relative;
+}
+
+.passwordNoteLabelSignUp {
+    width: 150px !important;
+    display: inline-block;
+    text-align: center;
+}
+
+.passwordNoteSignUp {
+    width: 50vw;
+    word-wrap: break-word !important;
+    font-size: x-small;
+    text-align: left;
+    display: inline-block;
+    padding: 0 5px;
+    border-radius: 5px;
+}
+
+.success {
+    position: relative;
+    border-radius: 10px;
+    width: fit-content;
+    padding: 5px 10px;
 }
 
 /* _______________________________________  max-width:850px _______________________________________________ */
@@ -1498,10 +1616,6 @@ input:disabled:not(.body_work, #title) {
         font-size: x-small;
     }
 
-    #addNoteTitle {
-        margin-top: -150px;
-    }
-
     .viewDiv {
         margin-top: -150px !important;
     }
@@ -1525,9 +1639,33 @@ input:disabled:not(.body_work, #title) {
 
 /* _______________________________________________  max-width:380px  ___________________________________________ */
 @media all and (max-width:381px) {
-    .message {
+    .success {
+        font-size: x-small;
+        top: -50px;
+    }
+
+    .messageViewnotes {
+        position: relative;
+        top: 36px;
         width: 100%;
         font-size: small;
+    }
+
+    .messageViewnotes+#back {
+        top: -50px;
+    }
+
+    #edit {
+        font-size: small;
+        padding: 5px 10px;
+        width: fit-content;
+        height: fit-content;
+    }
+
+    #viewTitle {
+        font-size: medium;
+        margin-top: 10px !important;
+        margin-bottom: 100px !important;
     }
 
     .attention h6,
@@ -1608,8 +1746,12 @@ input:disabled:not(.body_work, #title) {
         height: fit-content;
     }
 
-    #addNoteTitle {
+    .addDiv {
         margin-top: -150px;
+    }
+
+    #addNoteTitle {
+        margin-bottom: 25px;
     }
 
     #headerDiv li,
@@ -1694,7 +1836,7 @@ input:disabled:not(.body_work, #title) {
         width: fit-content;
         height: fit-content;
         font-size: small;
-        margin-bottom: 30px;
+        /* margin-bottom: 30px; */
     }
 
     .submit {
@@ -1832,13 +1974,50 @@ input:disabled:not(.body_work, #title) {
         font-size: medium;
         top: -250px;
     }
+
+    .viewHead {
+        margin-top: -80px;
+        height: fit-content;
+    }
+
+    .viewDiv {
+        height: fit-content;
+        margin-bottom: -50px !important;
+        margin-top: -120px !important;
+    }
+
+    .viewHead2 {
+        margin-top: -30px;
+    }
+
+    #back {
+        margin-left: 50px;
+        margin-top: -240px;
+    }
+
+    #show,
+    #show1 {
+        font-size: large;
+        height: 21px;
+        top: -2px;
+    }
 }
 
 /* __________________________  (max-width:500px) and (min-width:381px) _____________ */
 @media all and (min-width:381px) and (max-width:500px) {
-    .message {
-        width: 100%;
+    .success {
         font-size: small;
+        top: -170px;
+        margin-bottom: -200px;
+    }
+
+    .addDiv {
+        position: relative;
+        top: 0;
+    }
+
+    #addNoteTitle {
+        margin-bottom: 25px;
     }
 
     .background {
@@ -1951,8 +2130,16 @@ input:disabled:not(.body_work, #title) {
         width: 100%;
     }
 
+    .addDiv {
+        margin-top: -20px;
+    }
+
     #formsearch2 *,
     #formsearch * {
+        font-size: medium;
+    }
+
+    #formsearch {
         font-size: medium;
     }
 
@@ -2095,6 +2282,13 @@ input:disabled:not(.body_work, #title) {
         font-size: x-small !important;
     }
 
+    #show,
+    #show1 {
+        font-size: large !important;
+        height: 21px;
+        top: -4px;
+    }
+
     #email {
         padding: 5px 2px;
         font-size: mall;
@@ -2176,10 +2370,52 @@ input:disabled:not(.body_work, #title) {
     .alertDiv {
         margin-top: -200px !important;
     }
+
+    #viewTitle {
+        font-size: large;
+        margin-top: 50px !important;
+        margin-bottom: 100px !important;
+    }
+
+    .viewHead {
+        /* margin-top: -80px; */
+        height: fit-content;
+    }
+
+    .viewDiv {
+        height: fit-content;
+        margin-bottom: -50px !important;
+        margin-top: -120px !important;
+    }
+
+    .messageViewnotes {
+        position: relative;
+        top: -40px;
+        width: 100%;
+        font-size: small;
+    }
+
+    #back {
+        top: -50px;
+    }
+
+    .messageViewnotes+#back {
+        top: -136px;
+    }
+
+    .viewHead2 {
+        margin-top: -30px;
+    }
 }
 
 /* __________________________  (max-width:700px) and (min-width:501px) _____________ */
 @media all and (min-width:501px) and (max-width:700px) {
+    .success {
+        font-size: large;
+        top: -80px;
+        margin-bottom: -100px;
+    }
+
     .background {
         top: -120px !important;
         left: 0;
@@ -2287,6 +2523,14 @@ input:disabled:not(.body_work, #title) {
         width: 90%;
     }
 
+    .addDiv {
+        margin-top: -180px;
+    }
+
+    #addNoteTitle {
+        margin-bottom: 25px;
+    }
+
     #updatuser {
         width: 100%;
         margin: 0 !important;
@@ -2362,6 +2606,7 @@ input:disabled:not(.body_work, #title) {
     .newwork {
         width: fit-content;
         font-size: small;
+        margin: auto;
     }
 
     .sendMessage {
@@ -2443,10 +2688,56 @@ input:disabled:not(.body_work, #title) {
         margin-bottom: 10px;
     }
 
+    #viewTitle {
+        font-size: large;
+        margin-top: 100px !important;
+        margin-bottom: 200px !important;
+    }
+
+    .viewHead {
+        /* margin-top: -80px; */
+        height: fit-content;
+    }
+
+    .viewDiv {
+        height: fit-content;
+        margin-bottom: -50px !important;
+        margin-top: -300px !important;
+    }
+
+    #back {
+        margin-top: -170px;
+        margin-left: 50px;
+    }
+
+    .viewHead2 {
+
+        margin-top: -130px;
+    }
+
+    .footerDiv {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .footer li {
+        width: 9vw !important;
+    }
+
+    .messageViewnotes {
+        position: relative;
+        top: 120px;
+    }
 }
 
 /* ________________________  (min-width:700px) and (max-width:850px) ________________________ */
 @media all and (min-width:701px) and (max-width:850px) {
+    .success {
+        font-size: large;
+        top: -90px;
+        margin-bottom: -120px;
+    }
+
     .background {
         top: -120px !important;
         left: 0;
@@ -2585,7 +2876,6 @@ input:disabled:not(.body_work, #title) {
         height: 500px;
     }
 
-
     .okey {
         width: 60% !important;
         font-size: large !important;
@@ -2685,7 +2975,7 @@ input:disabled:not(.body_work, #title) {
     }
 
     .form_box label {
-        font-size: large;
+        font-size: medium;
         width: 90%;
         position: relative;
         bottom: -15px;
@@ -2732,6 +3022,44 @@ input:disabled:not(.body_work, #title) {
     .a_404 {
         font-size: medium;
         top: -250px;
+    }
+
+    .addDiv {
+        margin-top: -180px;
+    }
+
+    #addNoteTitle {
+        margin-bottom: 25px;
+    }
+
+    #viewTitle {
+        font-size: large;
+        margin-top: 100px !important;
+        margin-bottom: 200px !important;
+    }
+
+    .viewHead {
+        height: fit-content;
+    }
+
+    .viewDiv {
+        height: fit-content;
+        margin-bottom: -50px !important;
+        margin-top: -300px !important;
+    }
+
+    #back {
+        margin-top: -170px;
+        margin-left: 50px;
+    }
+
+    .viewHead2 {
+        margin-top: -130px;
+    }
+
+    .messageViewnotes {
+        position: relative;
+        top: 120px;
     }
 }
 
@@ -2782,7 +3110,18 @@ input:disabled:not(.body_work, #title) {
         height: 500px;
     }
 
+    .formsearch * {
+        font-size: small;
+    }
 
+    #viewTitle {
+        font-size: large;
+    }
+
+    .messageViewnotes {
+        position: relative;
+        top: 0px;
+    }
 }
 
 

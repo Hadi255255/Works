@@ -130,17 +130,10 @@ passport.use('local-signup', new localStrategy({
     passReqToCallback: true
 }, (req, email, password, done) => {
     var paramsName;
-
-    // User.find({}).then((users) => { console.log('users:', users) })
     User.findOne({ email: email })
         .then((user) => {
             if (user && user.password) {
                 return done(null, false, req.flash('signinError', "This user already exists."))
-            }
-            else if (req.body.password != req.body.confirm_password) {
-                return done(null, false, req.flash('signinError', "The password doesn't equal with the confirmation."))
-            } else if (req.body.password.length < 6) {
-                return done(null, false, req.flash('signinError', "Minimum password's length is 6."))
             }
             var paramsName = req.body.firstName.trim() + req.body.lastName.trim();
             User.find({ fullName: req.body.firstName + ' ' + req.body.lastName })

@@ -1,7 +1,7 @@
 <div class="col-md-6 offset-3 signupForm">
 
   <% if(messagesError!='' ){ %>
-    <h6 class="text-danger text-center p-2 w-100 message " style="
+    <h6 class="text-center p-2 w-100 message " style="
       border-radius: 25px;border:1px solid crimson;">
       <%= messagesError %>
     </h6>
@@ -10,28 +10,37 @@
       <h4 class="text-center">Sign up</h4>
       <form action="signup" method="post" class="form_box">
         <div class="form-group form-group1">
-          <label for="email">Email</label>
-          <input type="email" name="email" placeholder="Enter your email" class="form-control p-1 mb-1 input1 d-inline"
-            required>
+          <label for="emailsignup" id="emailLabel">Email</label>
+          <input type="email" name="email" id="emailsignup" placeholder="Enter your email"
+            autocomplete="additional-name" class="form-control p-1 mb-1 input1 d-inline" required>
         </div>
-        <div class="form-group form-group1">
-          <label for="password">Password</label>
+        <div class="form-group form-group1 eyegroup">
+          <p class="passwordNoteLabelSignUp">
+          </p>
+          <p class="passwordNoteSignUp">The password must contain at least one number, one uppercase letter, and one
+            lowercase letter.<br>
+            The minimum length is 6.
+          </p><br>
+          <label for="passwordSignup">Password <span id="show" class="">👁</span></label>
           <input type="password" name="password" placeholder="Enter your password" class="form-control p-1 mb-1 input1
-      d-inline" required minlength="6">
+      d-inline" required minlength="6" id="passwordSignup">
+
         </div>
         <div class="form-group form-group1">
-          <label for="confirm_password">Confirm password</label>
-          <input type="password" name="confirm_password" placeholder="Re Enter your password" class="form-control p-1 mb-1 input1
+          <label for="passwordSignupConfirm">Confirm password</label>
+          <input type="password" id="passwordSignupConfirm" name="confirm_password" placeholder="Re Enter your password"
+            class="form-control p-1 mb-1 input1
       d-inline" required minlength="6">
+
         </div>
         <div class="form-group form-group1">
-          <label for="confirm_password">First Name</label>
-          <input type="text" name="firstName" placeholder="Your First Name" class="form-control p-1 mb-1 input1
+          <label for="firstNameSignup">First Name</label>
+          <input type="text" name="firstName" id="firstNameSignup" placeholder="Your First Name" class="form-control p-1 mb-1 input1
       d-inline">
         </div>
         <div class="form-group form-group1">
-          <label for="confirm_password">Last Name</label>
-          <input type="text" name="lastName" placeholder="Your Last Name" class="form-control p-1 mb-1 input1
+          <label for="lastNameSignup">Last Name</label>
+          <input type="text" name="lastName" id="lastNameSignup" placeholder="Your Last Name" class="form-control p-1 mb-1 input1
       d-inline">
         </div>
         <input type="hidden" name="_csrf" value={{token}}>

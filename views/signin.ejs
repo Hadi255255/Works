@@ -1,13 +1,12 @@
 <div class="col-md-6 offset-3 signupForm">
   <% if(messagesError!='' ){ %>
-    <h5 class="text-center border border-danger border-1 py-1 px-3 message text-black"
+    <h5 class="text-center border border-danger border-1 py-1 px-3 message"
       style="border-radius: 25px;border:1px solid crimson;">
       <%= messagesError %>
     </h5>
     <% } %>
       <% if(messageSuccess!='' ){ %>
-        <h5 class="text-success text-center px-2 py-1 w-100 message"
-          style="border-radius: 25px;border:1px solid crimson;">
+        <h5 class="text-success text-center px-2 py-1 w-100 message" style="border-radius: 25px;">
           <%= messageSuccess %>
         </h5>
         <% } %>
@@ -20,13 +19,13 @@
               <h4 class="text-center mt-4">Sign In</h4>
               <form action="signin" method="post" class="form_box">
                 <div class="form-group form-group1">
-                  <label for="email">Email</label>
-                  <input type="email" name="email" placeholder="Enter you email"
+                  <label for="emailsignin">Email</label>
+                  <input type="email" name="email" id="emailsignin" placeholder="Enter you email"
                     class="form-control p-1 mb-1 d-inline input1 input_signin" required>
                 </div>
                 <div class="form-group form-group1">
-                  <label for="password">Password</label>
-                  <input type="password" name="password" placeholder="Enter you password"
+                  <label for="passwordSignin">Password<span id="show1" class="">👁</span></label>
+                  <input type="password" name="password" id="passwordSignin" placeholder="Enter you password"
                     class="form-control p-1 input1 d-inline input_signin" required>
                 </div>
                 <input type="hidden" name="_csrf" value={{token}}>

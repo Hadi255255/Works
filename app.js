@@ -19,12 +19,16 @@ const csrf = require('csurf');
 const multer = require('multer');
 const { param } = require('express-validator');
 
+const bodyParser = require('body-parser'); // new1
+// const cloudinary = require('cloudinary').v2;
+
 
 mongoose.connect('mongodb://127.0.0.1/notes_local')
     .then(() => {
         console.log(`Connected successfully to DataBase notes_local on port ${port}................. `);
     })
     .catch((err) => console.log('error: ', err));
+
 
 app.use(session({
     secret: 'keyboard cat',

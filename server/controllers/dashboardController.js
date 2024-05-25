@@ -8,6 +8,9 @@ const router = express.Router();
 const fs = require('fs');
 const csrf = require('csurf');
 const multer = require('multer');
+const { link } = require('fs/promises');
+const cloudinary = require('../cloudinary');
+
 // _____________________________ Upload Image ________________________________
 const storageEngine = multer.diskStorage({
     destination: function (req, file, cb) { // cb => callback function
@@ -17,7 +20,7 @@ const storageEngine = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         cb(null, new Date().toDateString() + new Date().getTime() + file.originalname)
-    }
+    },
 })
 var upload = multer({ storage: storageEngine }).array('images', 12)
 var uploadadd = multer({ storage: storageEngine }).array('imagesNotes', 12)
@@ -28,10 +31,9 @@ exports.dashboardViewNote = (req, res) => {
     try {
         const note = Note.find({})
             .then((works) => {
-                console.log('req.params: ', req.params)
                 var paramsID = req.params.id;
                 var admin = false;
-                var login, director, image, userFullName, paramsName, paramsNameAdmin, align, direction;
+                var login, director, image, userFullName, paramsName, paramsNameAdmin, align, direction, links;
                 var title1 = body1 = userFullName = userParamsName = images = groupImages1 = align = direction = '';
                 if (req.user) {
                     paramsNameAdmin = req.user.paramsName;
@@ -57,6 +59,7 @@ exports.dashboardViewNote = (req, res) => {
                             groupImages1 = work.groupImages;
                             align = work.align;
                             direction = work.direction;
+                            links = work.links;
                             if (req.user) {
                                 if (String(work.user) == String(req.user._id)) {
                                     admin = true;
@@ -79,6 +82,7 @@ exports.dashboardViewNote = (req, res) => {
                         align: align,
                         direction: direction,
                         messageSuccess: messageSuccess,
+                        links: links,
                     }
                     return res.render('dashboard/view-notes', {
                         locals,
@@ -109,16 +113,44 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
     uploadadd(req, res, function (err) {
         var updateNote, firstFileType, reqFiles;
         const userParamsName = req.user.paramsName;
+        var updatedAt = +(Date.now());
+        updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
+        // console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
+        var inputValue = req.body.inputValue;
+        var inputTitle = req.body.inputTitle;
+        var linksValuesArray = [];
+        var linksTitlesArray = [];
+        if (typeof inputValue == 'string') {
+            linksValuesArray.push(inputValue)
+        } else if (typeof inputValue == 'object') {
+            for (let i = 0; i < inputValue.length; i++) {
+                linksValuesArray.push(inputValue[i])
+            }
+        }
+        if (typeof inputTitle == 'string') {
+            linksTitlesArray.push(inputTitle)
+        } else if (typeof inputTitle == 'object') {
+            for (let i = 0; i < inputTitle.length; i++) {
+                linksTitlesArray.push(inputTitle[i])
+            }
+        }
         Note.findOne({ _id: req.body.note_id })
             .then((note) => {
+                if (note.links) {
+                    linksTitlesArray = note.links.linkTitle.concat(linksTitlesArray);
+                    linksValuesArray = note.links.linkValue.concat(linksValuesArray);
+                }
                 if (req.files.length == 0) {
-                    // console.log('req.files.length == 0:', req.files)
                     updateNote = {
                         body: req.body.body1,
                         title: req.body.title,
-                        updatedAt: Date.now(),
+                        updatedAt: updatedAt,
                         align: req.body.align,
                         direction: req.body.direction,
+                        links: {
+                            linkTitle: linksTitlesArray,
+                            linkValue: linksValuesArray,
+                        },
                     }
                 } else {
                     reqFiles = req.files;
@@ -127,12 +159,19 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
                             reqFiles.unshift(note.groupImages[i])
                         }
                     }
-                    // console.log('reqFiles :', reqFiles);
-                    // console.log('note.groupImages :', note.groupImages);
-                    // console.log('req.files :', req.files)
                     image = reqFiles[0].path.slice(6);
                     firstFileType = reqFiles[0].mimetype;
-                    console.log('firstFileType: ', firstFileType)
+                    // console.log('reqFiles[0]: ', reqFiles[0]);
+                    reqFiles.forEach((file) => {
+                        const uploadResult = cloudinary.uploader.upload(file.path, {
+                            public_id: file.filename
+                        }).catch((error) => { console.log(error) })
+                            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+
+                        console.log('uploadResult: ', uploadResult);
+                    })
+
+
                     updateNote = {
                         body: req.body.body1,
                         title: req.body.title,
@@ -142,12 +181,14 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
                         image: image,
                         align: req.body.align,
                         direction: req.body.direction,
+                        links: {
+                            linkTitle: linksTitlesArray,
+                            linkValue: linksValuesArray,
+                        },
                     }
-                    // console.log('updateNote :', updateNote)
                 }
                 const doc = Note.findOneAndUpdate({ _id: req.body.note_id }, { $set: updateNote })
                     .then((Successful) => {
-                        // console.log('Successful :', Successful)
                         req.flash('updateSuccess', "Successfully updated !");
                         return res.redirect('back')
                     });
@@ -157,15 +198,16 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
     })
 }
 exports.dashboardDeleteImage = async (req, res, next) => {
-    // console.log('req.body:', req.body)
     Note.findOne({ _id: req.body.note })
         .then((note) => {
             var updateNote, image;
             var imgs = note.groupImages;
             for (let i = 0; i < imgs.length; i++) {
-                // console.log(imgs[i].path)
                 if (imgs[i].path == req.body.imagePath) {
                     fs.unlink('./' + imgs[i].path, (err) => { });
+                    const deletResult = cloudinary.uploader.destroy(imgs[i].filename)
+                        .catch((error) => { console.log(error) })
+                        .then((result) => { console.log('Successful deleted from cloudinary: ', result) })
                     imgs.splice(i, 1);
                     if (imgs.length > 0) {
                         image = imgs[0].path.slice(6);
@@ -217,11 +259,10 @@ exports.dashboardDeleteNote = (req, res, next) => {
     try {
         Note.findOne({ _id: req.body.note_id })
             .then((note) => {
-                // console.log('note:::::::::::::; ', note)
                 if (note.groupImages.length > 0) {
                     note.groupImages.forEach(img => {
-                        // console.log('img.path: ', img.path)
                         fs.unlink('./' + img.path, (err) => { })
+                        const deletResult = cloudinary.uploader.destroy(img.filename)
                     })
                 }
             })
@@ -242,8 +283,8 @@ exports.dashboardDeleteAllNotes = (req, res, next) => {
             .then((notes) => {
                 notes.forEach(note => {
                     note.groupImages.forEach(img => {
-                        // console.log('img.path: ', img.path)
                         fs.unlink('./' + img.path, (err) => { })
+                        const deletResult = cloudinary.uploader.destroy(img.filename)
                     })
                 })
             })
@@ -307,18 +348,45 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
     try {
         upload(req, res, function (err) {
             if (err) { res.send("Somthing Error") }
-            var reqFiles, image, updateUser, firstFileType;
+            var reqFiles, image, updateUser, firstFileType, updatedAt, createdAt;
             var userParamsName = req.user.paramsName;
-
+            updatedAt = createdAt = +(Date.now());
+            updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
             if (req.files.length == 0) { reqFiles = [] }
             else {
                 reqFiles = req.files;
                 image = req.files[0].path.slice(6);
                 firstFileType = req.files[0].mimetype;
+                reqFiles.forEach((file) => {
+                    const uploadResult = cloudinary.uploader.upload(file.path, {
+                        public_id: file.filename
+                    }).catch((error) => { console.log(error) })
+                        .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+                    console.log('uploadResult: ', uploadResult);
+                })
             }
-            // console.log('req.params: ', req.params)
-            // console.log('req.body: ', req.body)
             req.body.user = req.user.id;
+            //____________________ Adding links ____________________________________
+            console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
+            var inputValue = req.body.inputValue;
+            var inputTitle = req.body.inputTitle;
+            var linksValuesArray = [];
+            var linksTitlesArray = [];
+            if (typeof inputValue == 'string') {
+                linksValuesArray.push(inputValue)
+            } else if (typeof inputValue == 'object') {
+                for (let i = 0; i < inputValue.length; i++) {
+                    linksValuesArray.push(inputValue[i])
+                }
+            }
+            if (typeof inputTitle == 'string') {
+                linksTitlesArray.push(inputTitle)
+            } else if (typeof inputTitle == 'object') {
+                for (let i = 0; i < inputTitle.length; i++) {
+                    linksTitlesArray.push(inputTitle[i])
+                }
+            }
+            // __________________________End Adding links___________________________________
             Note.create({
                 userEmail: req.user.email,
                 userFullName: req.user.fullName,
@@ -329,18 +397,19 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
                 image: image,
                 groupImages: reqFiles,
                 firstFileType: firstFileType,
-                createdAt: Date.now(),
-                updatedAt: Date.now(),
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 align: req.body.align,
                 direction: req.body.direction,
+                links: {
+                    linkTitle: linksTitlesArray,
+                    linkValue: linksValuesArray,
+                },
             }).then((n) => {
-                console.log('newNote: ', n)
                 Note.find({ userEmail: req.user.email }).then((notes1) => {
                     updateUser = {
                         works: notes1,
                     }
-                    // console.log('notes1:', notes1)
-                    // console.log('updateUser:', updateUser)
                     User.findOneAndUpdate({ _id: req.user.id }, { $set: updateUser })
                         .then(() => {
                             req.flash('updateSuccess', "Successfully added !");
@@ -354,3 +423,36 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
     }
 }
 
+exports.dashboardDeleteLink = (req, res, next) => {
+    var paramsID;
+    if (typeof req.body.paramsWork == 'string') {
+        paramsID = req.body.paramsWork;
+    } else {
+        console.log('typeof req.body.paramsWork: ', typeof req.body.paramsWork)
+        paramsID = req.body.paramsWork[0];
+    }
+    var linkNumber = req.body.n
+    Note.findOne({ _id: paramsID })
+        .then((note) => {
+            var linksTitlesArray = note.links.linkTitle
+            var linksValuesArray = note.links.linkValue
+            linksTitlesArray.splice(linkNumber, 1)
+            linksValuesArray.splice(linkNumber, 1)
+            var links = {
+                linkTitle: linksTitlesArray,
+                linkValue: linksValuesArray,
+            }
+            updateNote = {
+                links: {
+                    linkTitle: linksTitlesArray,
+                    linkValue: linksValuesArray,
+                }
+            }
+            Note.findOneAndUpdate({ _id: paramsID }, { $set: updateNote })
+                .then((theNote) => {
+                    res.redirect('back')
+                })
+
+        })
+
+}

@@ -29,5 +29,6 @@ router.post('/dashboard/mainImage', isLoggedIn, dashboardController.dashboardMai
 router.get('/:userParamsName/works/:id', dashboardController.dashboardViewNote);
 router.delete('/dashboard/item-delete/:id', isLoggedIn, dashboardController.dashboardDeleteNote);
 router.delete('/dashboard/items-delete', isLoggedIn, dashboardController.dashboardDeleteAllNotes);
+router.post('/dashboard/deleteLink', isLoggedIn, dashboardController.dashboardDeleteLink);
 
 module.exports = router;

@@ -14,7 +14,8 @@ const { check, validationResult } = require('express-validator');
 const fs = require('fs');
 const csrf = require('csurf');
 const multer = require('multer');
-require('../routes/auth')
+require('../routes/auth');
+const cloudinary = require('../cloudinary')
 
 // App routes
 router.get('/', mainController.homepage);
@@ -165,8 +166,14 @@ router.post('/updateUser', (req, res, next) => {
     confirmed = 'false';
   }
   if (req.body.password) {
-    newPassword = new User().hashPassword(req.body.password);
-  } else if (req.user.password) { newPassword = req.user.password }
+    if (req.body.password.length < 6) {
+      return res.status(204).send()
+    } else {
+      newPassword = new User().hashPassword(req.body.password);
+    }
+  }
+  else { return res.status(204).send() }
+
   if (firstName == req.user.firstName && lastName == req.user.lastName) {
     var paramsName = req.user.paramsName;
     if (req.body.password) {
@@ -180,10 +187,6 @@ router.post('/updateUser', (req, res, next) => {
         "gender": gender,
         "location": location,
         "birthday": birthday,
-      }
-      if (req.body.password.length < 6) {
-        req.flash('signinError', "Minimum password's length is 6. ");
-        return res.redirect('back')
       }
     } else {
       updateUser = {
@@ -215,7 +218,7 @@ router.post('/updateUser', (req, res, next) => {
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                 const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
-                console.log(link);
+                // console.log(link);
                 // ************* Send email **********************************
                 var transporter = nodemailer.createTransport({
                   service: 'Gmail',
@@ -322,7 +325,7 @@ router.post('/updateUser', (req, res, next) => {
                     }
                     const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                     const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
-                    console.log(link);
+                    // console.log(link);
                     // ************* Send email **********************************
                     var transporter = nodemailer.createTransport({
                       service: 'Gmail',
@@ -391,7 +394,7 @@ router.post('/forgotPassword', (req, res, next) => {
         }
         const token = jwt.sign(payload, secret, { expiresIn: '15000m' });
         const link = `http://localhost:5000/resetPassword/${user._id}/${token}`;
-        console.log(link);
+        // console.log(link);
         // ************* Send email **********************************
         var transporter = nodemailer.createTransport({
           service: 'Gmail',
@@ -589,6 +592,7 @@ var uploadResume = multer({
     fileSize: 1024 * 1024 * 10,
   },
 }).single('resume')
+
 router.post('/uploadfile', (req, res, next) => {
   upload(req, res, function (err) {
     if (err) { res.send("Somthing Error") }
@@ -599,6 +603,12 @@ router.post('/uploadfile', (req, res, next) => {
       const newUser = {
         image: (req.file.path).slice(6),
       };
+      const uploadResult = cloudinary.uploader.upload(req.file.path, {
+        public_id: req.file.filename
+      }).catch((error) => { console.log(error) })
+        .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+
+      console.log('uploadResult: ', uploadResult);
       User.updateOne({ _id: req.user._id }, { $set: newUser })
         .catch((err) => console.log(err))
         .then((doc) => {
@@ -620,6 +630,14 @@ router.post('/uploadfile', (req, res, next) => {
 
         }
         else {
+
+          const deletResult = cloudinary.uploader.destroy((req.user.image).slice(10))
+            .catch((error) => { console.log(error) })
+            .then((result) => { console.log('Successful deleted from cloudinary: ') })
+          const uploadResult = cloudinary.uploader.upload(req.file.path, {
+            public_id: req.file.filename
+          }).catch((error) => { console.log(error) })
+            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
           const newUser = {
             image: (req.file.path).slice(6),
           };
@@ -648,6 +666,10 @@ router.post('/:user/uploadResumefile', (req, res, next) => {
       const newUser = {
         resume: (req.file.path).slice(6),
       };
+      const uploadResult = cloudinary.uploader.upload(req.file.path, {
+        public_id: req.file.filename
+      }).catch((error) => { console.log(error) })
+        .then((result) => { console.log('Successful upload to cloudinary') })
       User.updateOne({ _id: req.user._id }, { $set: newUser })
         .catch((err) => console.log(err))
         .then((doc) => {
@@ -674,9 +696,18 @@ router.post('/:user/uploadResumefile', (req, res, next) => {
           const newUser = {
             resume: (req.file.path).slice(6),
           };
+          console.log('req.user.resume: ', req.user.resume)
+          const deletResult = cloudinary.uploader.destroy((req.user.resume).slice(10))
+            .catch((error) => { console.log(error) })
+            .then((result) => { console.log('Successful deleted from cloudinary: ') })
+          const uploadResult = cloudinary.uploader.upload(req.file.path, {
+            public_id: req.file.filename
+          }).catch((error) => { console.log(error) })
+            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
           User.updateOne({ _id: req.user._id }, { $set: newUser })
             .catch((err) => console.log(err))
             .then((doc) => {
+
               req.flash('updateSuccess', "Successfully updated !");
               res.redirect('resume')
             })
@@ -719,11 +750,19 @@ router.get('/users', (req, res, next) => {
 router.post('/deleteAccount', (req, res, next) => {
   const path = './public' + req.user.image;
   if (path != './public/img/user/image.png') {
-    fs.unlink(path, (err) => { console.log('Error in deleting the image of profile.') })
+    fs.unlink(path, (err) => { console.log('Error in deleting the image of profile.') });
+    const deletImage = cloudinary.uploader.destroy((req.user.image).slice(10))
+      .catch((error) => { console.log(error) })
+      .then((result) => { console.log('Successful deleted image from cloudinary: ') })
   };
   const path2 = './public' + req.user.resume;
   if (path2 != './public/img/user/noresume.pdf') {
-    fs.unlink(path2, (err) => { console.log('Error in deleting the resume.') })
+    fs.unlink(path2, (err) => {
+      console.log('Error in deleting the resume.')
+    });
+    const deletResume = cloudinary.uploader.destroy((req.user.resume).slice(10))
+      .catch((error) => { console.log(error) })
+      .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
   };
   Note.find({ userEmail: req.user.email })
     .then((notes) => {
@@ -731,6 +770,7 @@ router.post('/deleteAccount', (req, res, next) => {
         notes.forEach(note => {
           note.groupImages.forEach(img => {
             fs.unlink('./' + img.path, (err) => { console.log('Error in deleting the images of works.') })
+            const deletResult = cloudinary.uploader.destroy(img.filename)
           })
         });
         Note.deleteMany({ user: req.user._id }).then(() => {
@@ -767,13 +807,21 @@ router.post('/deleteUser/:id', (req, res, next) => {
     if (user.email == 'engineer.shadirahhal@gmail.com') {
       return res.redirect('/ShadiRahhal')
     }
+    console.log('user.image: ', user.image)
+    console.log('user.resume: ', user.resume)
     const path = './public' + user.image;
     if (path != './public/img/user/image.png') {
-      fs.unlink(path, (err) => { })
+      fs.unlink(path, (err) => { });
+      const deletImage = cloudinary.uploader.destroy((user.image).slice(10))
+        .catch((error) => { console.log(error) })
+        .then((result) => { console.log('Successful deleted image from cloudinary: ') })
     };
     const path2 = './public' + user.resume;
     if (path2 != './public/img/user/noresume.pdf') {
-      fs.unlink(path2, (err) => { console.log('Error in deleting the resume.') })
+      fs.unlink(path2, (err) => { console.log('Error in deleting the resume.') });
+      const deletResume = cloudinary.uploader.destroy((user.resume).slice(10))
+        .catch((error) => { console.log(error) })
+        .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
     };
     Note.find({ userEmail: user.email })
       .then((notes) => {
@@ -781,7 +829,8 @@ router.post('/deleteUser/:id', (req, res, next) => {
           notes.forEach(note => {
             note.groupImages.forEach(img => {
               if (img) {
-                fs.unlink('./' + img.path, (err) => { })
+                fs.unlink('./' + img.path, (err) => { });
+                const deletResult = cloudinary.uploader.destroy(img.filename)
               }
             })
           })
@@ -1050,7 +1099,6 @@ router.get('/contact', (req, res, next) => {
   res.render('./contact', { locals, })
 })
 router.post('/sendMessage', (req, res, next) => {
-  console.log('req.body: ', req.body)
   if (req.body.message == '') {
     return res.status(204).send();
   }
@@ -1128,7 +1176,6 @@ router.get('/:user', (req, res, next) => {
           }
         }
       });
-      console.log('messageInform: ', messageInform)
       const locals = {
         messageSuccess: messageSuccess,
         messagesError: messagesError,
@@ -1336,7 +1383,6 @@ router.post('/:paramsName/works/result', async (req, res, next) => {
     }
     var note = '';
     let searchTerm = req.body.searchTerm;
-    console.log("searchTerm: ", searchTerm)
     // const searchNoSpecialChars = searchTerm.replace(/[^a-zA-Z0-9]/g, '');
     if (searchTerm.length == 0) {
       return res.status(204).send();// This doesn't redirect , or:
@@ -1382,7 +1428,6 @@ router.post('/:paramsName/works/result', async (req, res, next) => {
           },
         ]
       }).then((notes) => {
-        // console.log('notes:works :', notes[0].updatedAt)
         res.render('dashboard/index', {
           pages: '',
           current: '',

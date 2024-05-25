@@ -179,7 +179,7 @@
                                                             <% if(notes[i].firstFileType=='application/pdf' ){%>
                                                               <iframe src="<%= notes[i].image %>"
                                                                 class="mb-3 mx-auto viewImages" height="220px"
-                                                                width="84%" style="">
+                                                                width="84%">
                                                               </iframe>
                                                               <%}else if(notes[i].firstFileType !='video/mp4' &&
                                                                 notes[i].firstFileType!='video/mp3' ){%>
@@ -197,11 +197,15 @@
 
                                                         <p class="card-text py-2 position-absolute bottom-0 mx-auto">
                                                           <% if(searchResults==false){%>
-                                                            <%= notes[i].updatedAt.slice(0,10)%> (Time: <%=
-                                                                notes[i].updatedAt.slice(11,-5) %>)
+                                                            <%= String(notes[i].updatedAt).slice(0,10)%> (Time: <%=
+                                                                String(notes[i].updatedAt).slice(11,-5) %>)
                                                                 <%}else{%>
-                                                                  <%= String(notes[i].updatedAt).slice(0,15) %>(Time:
-                                                                    <%= String(notes[i].updatedAt).slice(15,-33) %>)
+                                                                  <%= Date(+(notes[i].updatedAt) + +(new
+                                                                    Date().getTimezoneOffset()) * 60 * 1000).slice(0,15)
+                                                                    %>(Time:
+                                                                    <%= Date(+(notes[i].updatedAt) + +(new
+                                                                      Date().getTimezoneOffset()) * 60 *
+                                                                      1000).slice(15,-33) %>)
                                                                       <%}%>
                                                         </p>
 
