@@ -23,21 +23,21 @@ const bodyParser = require('body-parser'); // new1
 // const cloudinary = require('cloudinary').v2;
 
 
-mongoose.connect('mongodb://127.0.0.1/notes_local')
-    .then(() => {
-        console.log(`Connected successfully to DataBase notes_local on port ${port}................. `);
-    })
-    .catch((err) => console.log('error: ', err));
+// mongoose.connect('mongodb://127.0.0.1/notes_local')
+//     .then(() => {
+//         console.log(`Connected successfully to DataBase notes_local on port ${port}................. `);
+//     })
+//     .catch((err) => console.log('error: ', err));
 
 
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
-    // store: MongoStore.create({              //1
-    //     mongoUrl: process.env.MONGODB_URI
-    // }),
-    // cookie: { maxAge: new Date(Date.now() + 3600000) } // 1 hour
+    store: MongoStore.create({              //1
+        mongoUrl: process.env.MONGODB_URI
+    }),
+    cookie: { maxAge: new Date(Date.now() + 3600000) } // 1 hour
 
 }))
 app.use(flash());
@@ -54,7 +54,7 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 // Connect to Database          //2
-// connectDB();
+connectDB();
 
 // Static Files
 app.use(express.static('public'));
