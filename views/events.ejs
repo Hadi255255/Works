@@ -1,1 +1,43 @@
+<h1 class="text-center w-50 mx-auto">Events</h1>
+<%if(events){%>
+    <form action="deleteHistory" method="post">
+        <button type="submit" class="btn btn-danger mx-auto my-3 d-block">Delete History</button>
+    </form>
+    <table class="events">
+        <tr>
+            <th class="" style="width:300px;font-size: small;">Email</th>
+            <th class="" style="width:300px;font-size: small;">Signup Date</th>
+            <th class="" style="width:300px;font-size: small;">Signin Date</th>
+            <th class="" style="width:300px;font-size: small;">Deleted Date</th>
+        </tr>
+        <% events.forEach((event)=>{ %>
+            <tr>
+                <td>
+                    <p>
+                        <%= event.email%>
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        <%= String(event.signupDate).slice(0,25)%>
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        <%= String(event.signinDate).slice(0,25)%>
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        <%= String(event.deleteAccountDate).slice(0,25)%>
+                    </p>
+                </td>
+
+
+
+            </tr>
+            <%})%>
+    </table>
+
+    <%}%>
 
