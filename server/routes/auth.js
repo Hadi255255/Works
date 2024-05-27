@@ -52,7 +52,7 @@ passport.use(new GoogleStrategy({
             let user = await User.findOne({ googleId: profile.id })
             if (user) {
                 const eventUpdate = {
-                    signinDate: new Date()
+                    signinDate: Date.now()
                 };
                 console.log('57');
                 Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
@@ -63,7 +63,7 @@ passport.use(new GoogleStrategy({
                     .then((userEmail) => {
                         if (userEmail) {
                             const eventUpdate = {
-                                signinDate: new Date()
+                                signinDate: Date.now()
                             };
                             Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
                                 .then((event) => { console.log(event) })
@@ -249,7 +249,7 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
             const eventUpdate = {
-                signinDate: new Date()
+                signinDate: Date.now(),
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => { console.log(event) })
