@@ -116,6 +116,22 @@ h6 {
     height: 40px;
 }
 
+.events * {
+    font-size: small;
+    word-wrap: break-word;
+    text-align: center;
+    padding-top: 10px;
+
+}
+
+.events th {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 900;
+    font-size: medium !important;
+    padding-bottom: 10px;
+    border: 1px yellow solid;
+}
+
 @keyframes hey {
 
     0%,
