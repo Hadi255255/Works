@@ -5,8 +5,10 @@ const mainController = require('../controllers/mainController');
 const passport = require('passport');
 const { isLoggedIn } = require('../middleware/checkAuth');
 const { isNotLoggedIn } = require('../middleware/checkAuth');
+const { isDirector } = require('../middleware/checkAuth');
 const User = require('../models/User');
 const Note = require('../models/Notes');
+const Events = require('../models/Events');
 const jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 const JWT_SECRET = 'Some super secret .....';
@@ -15,7 +17,7 @@ const fs = require('fs');
 const csrf = require('csurf');
 const multer = require('multer');
 require('../routes/auth');
-const cloudinary = require('../cloudinary')
+const cloudinary = require('../cloudinary');
 
 // App routes
 router.get('/', mainController.homepage);
@@ -34,7 +36,7 @@ router.get('/signup', isNotLoggedIn, (req, res) => {
   }
   var messagesError = req.flash('signinError');
   if (req.isAuthenticated()) { return res.redirect("/") }
-  res.render('./signup', { messagesError: messagesError, locals })
+  res.render('signup', { messagesError: messagesError, locals })
 });
 
 router.post('/signup', isNotLoggedIn, (req, res, next) => {
@@ -62,7 +64,7 @@ router.get('/signin', isNotLoggedIn, (req, res, next) => {
   var messageSuccess = req.flash('signSuccess');
   var messageInform = req.flash('inform');
   if (req.isAuthenticated()) { res.redirect("/") }
-  res.render('./signin', {
+  res.render('signin', {
     locals,
     messagesError: messagesError,
     messageSuccess: messageSuccess,
@@ -367,7 +369,7 @@ router.post('/updateUser', (req, res, next) => {
           })
       })
   }
-})
+});
 router.get('/forgotPassword', (req, res) => {
   var messageInform = req.flash('inform');
   var paramsNameAdmin;
@@ -378,6 +380,7 @@ router.get('/forgotPassword', (req, res) => {
     paramsNameAdmin: paramsNameAdmin,
   })
 });
+
 router.post('/forgotPassword', (req, res, next) => {
   const email = req.body.email.trim(); // Or: req.body.trim() 
   User.findOne({ email: email })
@@ -541,7 +544,8 @@ router.get('/sendLink', (req, res, next) => {
     req.flash('inform', "A link was sent successfully to your email.")
     sendLinkFunction(req, res, next);
   }
-})
+});
+
 // _____________________________ Upload Image ________________________________
 const fileFilter = function (req, file, cb) {
   if (file.mimetype == 'image/jpeg' ||
@@ -555,14 +559,14 @@ const fileFilter = function (req, file, cb) {
   } else {
     cb(new Error('Please upload jpeg or svg image '), false)
   }
-}
+};
 const pdfFilter = function (req, file, cb) {
   if (file.mimetype == 'image/pdf') {
     cb(null, true)
   } else {
     cb(new Error('Please upload jpeg or svg image '), false)
   }
-}
+};
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/img/user')
@@ -570,7 +574,7 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, new Date().toDateString() + new Date().getTime() + file.originalname)
   }
-})
+});
 const storage2 = multer.diskStorage({
   destination: function (req, resume, cb) {
     cb(null, './public/img/user')
@@ -578,21 +582,36 @@ const storage2 = multer.diskStorage({
   filename: function (req, resume, cb) {
     cb(null, new Date().toDateString() + new Date().getTime() + resume.originalname)
   }
-})
+});
 var upload = multer({
   storage: storage,
   limits: {
     fileSize: 1024 * 1024 * 5,
   },
   fileFilter: fileFilter,
-}).single('file')
+}).single('file');
+
 var uploadResume = multer({
   storage: storage2,
   limits: {
     fileSize: 1024 * 1024 * 10,
   },
-}).single('resume')
+}).single('resume');
 
+router.get('/events', isDirector, (req, res) => {
+  var login;
+  if (req.user) { login = true } else { login = false }
+  Events.find({}).then((events) => {
+    res.render('events', { events: events, login: login })
+  });
+
+});
+router.post('/deleteHistory', isDirector, (req, res) => {
+  Events.deleteMany({})
+    .then(() => {
+      res.redirect('back')
+    })
+})
 router.post('/uploadfile', (req, res, next) => {
   upload(req, res, function (err) {
     if (err) { res.send("Somthing Error") }
@@ -743,10 +762,10 @@ router.get('/users', (req, res, next) => {
           paramsNameAdmin: paramsName,
           paramsName: paramsName,
         }
-        res.render('./users', { locals, })
+        res.render('users', { locals, })
       })
   })
-})
+});
 router.post('/deleteAccount', (req, res, next) => {
   const path = './public' + req.user.image;
   if (path != './public/img/user/image.png') {
@@ -786,6 +805,11 @@ router.post('/deleteAccount', (req, res, next) => {
         })
       } else {
         const userId = req.user._id;
+        const signinDate = {
+          deleteAccountDate: new Date()
+        };
+        Events.findOneAndUpdate({ email: req.user.email }, { $set: signinDate }, { $upset: true })
+          .then((event) => { console.log(event) })
         const doc = User.deleteOne({ _id: userId })
           .then((deleted) => {
             req.logOut(() => {
@@ -801,7 +825,8 @@ router.post('/deleteAccount', (req, res, next) => {
       }
     })
 
-})
+});
+
 router.post('/deleteUser/:id', (req, res, next) => {
   User.findOne({ _id: req.params.id }).then((user) => {
     if (user.email == 'engineer.shadirahhal@gmail.com') {
@@ -858,7 +883,8 @@ router.get('/signin/works', (req, res, next) => {
   if (!req.user) {
     return res.redirect('/signin')
   }
-})
+});
+
 router.get('/:user/works', (req, res, next) => {
   var messageInform = req.flash('inform');
   var admin = false;
@@ -1080,7 +1106,7 @@ router.get('/dashboard', (req, res, next) => {
   } catch (error) {
     console.log(error)
   }
-})
+});
 router.get('/contact', (req, res, next) => {
   var paramsName, login, email;
   var messageSuccess = req.flash('sentSuccess');
@@ -1096,8 +1122,9 @@ router.get('/contact', (req, res, next) => {
     email: email,
     messageSuccess: messageSuccess,
   }
-  res.render('./contact', { locals, })
-})
+  res.render('contact', { locals, })
+});
+
 router.post('/sendMessage', (req, res, next) => {
   if (req.body.message == '') {
     return res.status(204).send();
@@ -1125,7 +1152,7 @@ router.post('/sendMessage', (req, res, next) => {
       res.redirect('back')
     }
   })
-})
+});
 router.get('/:user', (req, res, next) => {
   var admin = login = confirmed = director = false;
   var userName, userID, email, firstName, lastName, image, speciality, education, skills, paramsName, location, gender, birthday, messagesError, messageSuccess, messageInform, password, paramsNameAdmin;
@@ -1207,7 +1234,8 @@ router.get('/:user', (req, res, next) => {
         locals,
       })
     })
-})
+});
+
 router.get('/:user/resume', (req, res, next) => {
   var admin = login = confirmed = director = false;
   var userName, userID, email, firstName, lastName, image, paramsName, paramsNameAdmin;
@@ -1260,7 +1288,7 @@ router.get('/:user/resume', (req, res, next) => {
         locals,
       })
     })
-})
+});
 
 router.post('/searchUsersResult', async (req, res, next) => {
   var users = []; var refused = 0;
@@ -1349,7 +1377,8 @@ router.post('/searchUsersResult', async (req, res, next) => {
       })
     })
   })
-})
+});
+
 router.post('/:paramsName/works/sort', async (req, res, next) => {
   const updateUser = {
     orderWorks: req.body.sort,
@@ -1358,7 +1387,8 @@ router.post('/:paramsName/works/sort', async (req, res, next) => {
     .then((user) => {
       res.redirect('back')
     })
-})
+});
+
 //____________ search Works Result ___________________________________
 router.post('/:paramsName/works/result', async (req, res, next) => {
   try {
@@ -1479,7 +1509,7 @@ router.post('/:paramsName/works/result', async (req, res, next) => {
   } catch (error) {
     console.log(error)
   }
-})
+});
 
 router.post('/sort', (req, res, next) => {
   const updateUser = {
@@ -1489,7 +1519,8 @@ router.post('/sort', (req, res, next) => {
     .then((user) => {
       res.redirect('back')
     })
-})
+});
+
 router.post('/*/sort', (req, res, next) => {
   const updateUser = {
     orderWorks: req.body.sort,
@@ -1498,7 +1529,10 @@ router.post('/*/sort', (req, res, next) => {
     .then((user) => {
       res.redirect('back')
     })
-})
+});
+
+
+
 
 function sendLinkFunction(req, res, next) {
   var user = req.user;
