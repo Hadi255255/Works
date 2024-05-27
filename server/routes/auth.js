@@ -12,6 +12,7 @@ var nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const { profile } = require('../controllers/mainController');
 const { param } = require('express-validator');
+const Events = require('../models/Events');
 const JWT_SECRET = 'Some super secret .....'
 
 
@@ -50,16 +51,32 @@ passport.use(new GoogleStrategy({
         try {
             let user = await User.findOne({ googleId: profile.id })
             if (user) {
+                const eventUpdate = {
+                    signinDate: new Date()
+                };
+                console.log('57');
+                Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
+                    .then((event) => { console.log(event) })
                 done(null, user)
             } else {
                 User.findOne({ email: profile.emails[0].value })
                     .then((userEmail) => {
                         if (userEmail) {
-                            // Auto sign in. How can I do this?
+                            const eventUpdate = {
+                                signinDate: new Date()
+                            };
+                            Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
+                                .then((event) => { console.log(event) })
+                            //________ Auto sign in_______________
                             done(null, userEmail)
                         } else {
                             user = User.create(newUser)
                                 .then((user) => {
+                                    const newEvents = new Events({
+                                        email: user.email,
+                                        signupDate: Date.now(),
+                                    });
+                                    newEvents.save();
                                     done(null, user)
                                 })
                         }
@@ -196,6 +213,11 @@ passport.use('local-signup', new localStrategy({
                             });
                             // *************** End Sending email ***************************
                             // console.log('newUser: ', user)
+                            const newEvents = new Events({
+                                email: user.email,
+                                signupDate: Date.now(),
+                            });
+                            newEvents.save();
                             return done(null, user, req.flash('signSuccess', 'Successfully created a new user.'), req.flash('inform', 'A confirmation link has been sent to your email.'))
                         })
                         .catch((err) => console.log(err))
@@ -226,7 +248,12 @@ passport.use('local-signin', new localStrategy({
             if (req.body.email == '') {
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
-            return done(null, user, { p: 'ppp' });
+            const eventUpdate = {
+                signinDate: new Date()
+            };
+            Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
+                .then((event) => { console.log(event) })
+            return done(null, user);
         })
         .catch((err) => {
             return done('Sign Error :', err)
