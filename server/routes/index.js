@@ -653,10 +653,10 @@ router.post('/uploadfile', (req, res, next) => {
           // const deletResult = cloudinary.uploader.destroy((req.user.image).slice(10))
           //   .catch((error) => { console.log(error) })
           //   .then((result) => { console.log('Successful deleted from cloudinary: ') })
-          const uploadResult = cloudinary.uploader.upload(req.file.path, {
-            public_id: req.file.filename
-          }).catch((error) => { console.log(error) })
-            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+          // const uploadResult = cloudinary.uploader.upload(req.file.path, {
+          //   public_id: req.file.filename
+          // }).catch((error) => { console.log(error) })
+          //   .then((result) => { console.log('Successful upload to cloudinary: ', result) })
           const newUser = {
             image: (req.file.path).slice(6),
           };
@@ -719,10 +719,10 @@ router.post('/:user/uploadResumefile', (req, res, next) => {
           // const deletResult = cloudinary.uploader.destroy((req.user.resume).slice(10))
           //   .catch((error) => { console.log(error) })
           //   .then((result) => { console.log('Successful deleted from cloudinary: ') })
-          const uploadResult = cloudinary.uploader.upload(req.file.path, {
-            public_id: req.file.filename
-          }).catch((error) => { console.log(error) })
-            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+          // const uploadResult = cloudinary.uploader.upload(req.file.path, {
+          //   public_id: req.file.filename
+          // }).catch((error) => { console.log(error) })
+          //   .then((result) => { console.log('Successful upload to cloudinary: ', result) })
           User.updateOne({ _id: req.user._id }, { $set: newUser })
             .catch((err) => console.log(err))
             .then((doc) => {
