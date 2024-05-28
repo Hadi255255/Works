@@ -622,10 +622,10 @@ router.post('/uploadfile', (req, res, next) => {
       const newUser = {
         image: (req.file.path).slice(6),
       };
-      const uploadResult = cloudinary.uploader.upload(req.file.path, {
-        public_id: req.file.filename
-      }).catch((error) => { console.log(error) })
-        .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+      // const uploadResult = cloudinary.uploader.upload(req.file.path, {
+      //   public_id: req.file.filename
+      // }).catch((error) => { console.log(error) })
+      //   .then((result) => { console.log('Successful upload to cloudinary: ', result) })
 
       console.log('uploadResult: ', uploadResult);
       User.updateOne({ _id: req.user._id }, { $set: newUser })
@@ -650,9 +650,9 @@ router.post('/uploadfile', (req, res, next) => {
         }
         else {
 
-          const deletResult = cloudinary.uploader.destroy((req.user.image).slice(10))
-            .catch((error) => { console.log(error) })
-            .then((result) => { console.log('Successful deleted from cloudinary: ') })
+          // const deletResult = cloudinary.uploader.destroy((req.user.image).slice(10))
+          //   .catch((error) => { console.log(error) })
+          //   .then((result) => { console.log('Successful deleted from cloudinary: ') })
           const uploadResult = cloudinary.uploader.upload(req.file.path, {
             public_id: req.file.filename
           }).catch((error) => { console.log(error) })
@@ -685,10 +685,10 @@ router.post('/:user/uploadResumefile', (req, res, next) => {
       const newUser = {
         resume: (req.file.path).slice(6),
       };
-      const uploadResult = cloudinary.uploader.upload(req.file.path, {
-        public_id: req.file.filename
-      }).catch((error) => { console.log(error) })
-        .then((result) => { console.log('Successful upload to cloudinary') })
+      // const uploadResult = cloudinary.uploader.upload(req.file.path, {
+      //   public_id: req.file.filename
+      // }).catch((error) => { console.log(error) })
+      //   .then((result) => { console.log('Successful upload to cloudinary') })
       User.updateOne({ _id: req.user._id }, { $set: newUser })
         .catch((err) => console.log(err))
         .then((doc) => {
@@ -716,9 +716,9 @@ router.post('/:user/uploadResumefile', (req, res, next) => {
             resume: (req.file.path).slice(6),
           };
           console.log('req.user.resume: ', req.user.resume)
-          const deletResult = cloudinary.uploader.destroy((req.user.resume).slice(10))
-            .catch((error) => { console.log(error) })
-            .then((result) => { console.log('Successful deleted from cloudinary: ') })
+          // const deletResult = cloudinary.uploader.destroy((req.user.resume).slice(10))
+          //   .catch((error) => { console.log(error) })
+          //   .then((result) => { console.log('Successful deleted from cloudinary: ') })
           const uploadResult = cloudinary.uploader.upload(req.file.path, {
             public_id: req.file.filename
           }).catch((error) => { console.log(error) })
@@ -770,18 +770,18 @@ router.post('/deleteAccount', (req, res, next) => {
   const path = './public' + req.user.image;
   if (path != './public/img/user/image.png') {
     fs.unlink(path, (err) => { console.log('Error in deleting the image of profile.') });
-    const deletImage = cloudinary.uploader.destroy((req.user.image).slice(10))
-      .catch((error) => { console.log(error) })
-      .then((result) => { console.log('Successful deleted image from cloudinary: ') })
+    // const deletImage = cloudinary.uploader.destroy((req.user.image).slice(10))
+    //   .catch((error) => { console.log(error) })
+    //   .then((result) => { console.log('Successful deleted image from cloudinary: ') })
   };
   const path2 = './public' + req.user.resume;
   if (path2 != './public/img/user/noresume.pdf') {
     fs.unlink(path2, (err) => {
       console.log('Error in deleting the resume.')
     });
-    const deletResume = cloudinary.uploader.destroy((req.user.resume).slice(10))
-      .catch((error) => { console.log(error) })
-      .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
+    // const deletResume = cloudinary.uploader.destroy((req.user.resume).slice(10))
+    //   .catch((error) => { console.log(error) })
+    //   .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
   };
   Note.find({ userEmail: req.user.email })
     .then((notes) => {
@@ -789,7 +789,7 @@ router.post('/deleteAccount', (req, res, next) => {
         notes.forEach(note => {
           note.groupImages.forEach(img => {
             fs.unlink('./' + img.path, (err) => { console.log('Error in deleting the images of works.') })
-            const deletResult = cloudinary.uploader.destroy(img.filename)
+            // const deletResult = cloudinary.uploader.destroy(img.filename)
           })
         });
         Note.deleteMany({ user: req.user._id }).then(() => {
@@ -837,16 +837,16 @@ router.post('/deleteUser/:id', (req, res, next) => {
     const path = './public' + user.image;
     if (path != './public/img/user/image.png') {
       fs.unlink(path, (err) => { });
-      const deletImage = cloudinary.uploader.destroy((user.image).slice(10))
-        .catch((error) => { console.log(error) })
-        .then((result) => { console.log('Successful deleted image from cloudinary: ') })
+      // const deletImage = cloudinary.uploader.destroy((user.image).slice(10))
+      //   .catch((error) => { console.log(error) })
+      //   .then((result) => { console.log('Successful deleted image from cloudinary: ') })
     };
     const path2 = './public' + user.resume;
     if (path2 != './public/img/user/noresume.pdf') {
       fs.unlink(path2, (err) => { console.log('Error in deleting the resume.') });
-      const deletResume = cloudinary.uploader.destroy((user.resume).slice(10))
-        .catch((error) => { console.log(error) })
-        .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
+      // const deletResume = cloudinary.uploader.destroy((user.resume).slice(10))
+      //   .catch((error) => { console.log(error) })
+      //   .then((result) => { console.log('Successful deleted resume from cloudinary: ') })
     };
     Note.find({ userEmail: user.email })
       .then((notes) => {
@@ -855,7 +855,7 @@ router.post('/deleteUser/:id', (req, res, next) => {
             note.groupImages.forEach(img => {
               if (img) {
                 fs.unlink('./' + img.path, (err) => { });
-                const deletResult = cloudinary.uploader.destroy(img.filename)
+                // const deletResult = cloudinary.uploader.destroy(img.filename)
               }
             })
           })
