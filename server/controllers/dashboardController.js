@@ -161,19 +161,19 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
                     }
                     image = reqFiles[0].path.slice(6);
                     firstFileType = reqFiles[0].mimetype;
-                    try {
-                        reqFiles.forEach((file) => {
-                            const uploadResult = cloudinary.uploader.upload(file.path, {
-                                public_id: file.filename
-                            }).catch((error) => { console.log(error) })
-                                .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+                    // try {
+                    //     reqFiles.forEach((file) => {
+                    //         const uploadResult = cloudinary.uploader.upload(file.path, {
+                    //             public_id: file.filename
+                    //         }).catch((error) => { console.log(error) })
+                    //             .then((result) => { console.log('Successful upload to cloudinary: ', result) })
 
-                            console.log('uploadResult: ', uploadResult);
-                        })
-                    }
-                    catch {
-                        console.log('Forbidden');
-                    }
+                    //         console.log('uploadResult: ', uploadResult);
+                    //     })
+                    // }
+                    // catch {
+                    //     console.log('Forbidden');
+                    // }
 
                     updateNote = {
                         body: req.body.body1,
@@ -208,13 +208,13 @@ exports.dashboardDeleteImage = async (req, res, next) => {
             for (let i = 0; i < imgs.length; i++) {
                 if (imgs[i].path == req.body.imagePath) {
                     fs.unlink('./' + imgs[i].path, (err) => { });
-                    try {
-                        const deletResult = cloudinary.uploader.destroy(imgs[i].filename)
-                            .catch((error) => { console.log(error) })
-                            .then((result) => { console.log('Successful deleted from cloudinary: ', result) })
-                    } catch {
-                        console.log('Forbidden');
-                    }
+                    // try {
+                    //     const deletResult = cloudinary.uploader.destroy(imgs[i].filename)
+                    //         .catch((error) => { console.log(error) })
+                    //         .then((result) => { console.log('Successful deleted from cloudinary: ', result) })
+                    // } catch {
+                    //     console.log('Forbidden');
+                    // }
                     imgs.splice(i, 1);
                     if (imgs.length > 0) {
                         image = imgs[0].path.slice(6);
@@ -269,12 +269,12 @@ exports.dashboardDeleteNote = (req, res, next) => {
                 if (note.groupImages.length > 0) {
                     note.groupImages.forEach(img => {
                         fs.unlink('./' + img.path, (err) => { })
-                        try {
-                            const deletResult = cloudinary.uploader.destroy(img.filename)
-                        }
-                        catch {
-                            console.log('Forbidden');
-                        }
+                        // try {
+                        //     const deletResult = cloudinary.uploader.destroy(img.filename)
+                        // }
+                        // catch {
+                        //     console.log('Forbidden');
+                        // }
                     })
                 }
             })
@@ -296,12 +296,12 @@ exports.dashboardDeleteAllNotes = (req, res, next) => {
                 notes.forEach(note => {
                     note.groupImages.forEach(img => {
                         fs.unlink('./' + img.path, (err) => { })
-                        try {
-                            const deletResult = cloudinary.uploader.destroy(img.filename)
-                        }
-                        catch {
-                            console.log('Forbidden');
-                        }
+                        // try {
+                        //     const deletResult = cloudinary.uploader.destroy(img.filename)
+                        // }
+                        // catch {
+                        //     console.log('Forbidden');
+                        // }
                     })
                 })
             })
@@ -374,18 +374,18 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
                 reqFiles = req.files;
                 image = req.files[0].path.slice(6);
                 firstFileType = req.files[0].mimetype;
-                try {
-                    reqFiles.forEach((file) => {
-                        const uploadResult = cloudinary.uploader.upload(file.path, {
-                            public_id: file.filename
-                        }).catch((error) => { console.log(error) })
-                            .then((result) => { console.log('Successful upload to cloudinary: ', result) })
-                        console.log('uploadResult: ', uploadResult);
-                    })
-                }
-                catch {
-                    console.log('Forbidden');
-                }
+                // try {
+                //     reqFiles.forEach((file) => {
+                //         const uploadResult = cloudinary.uploader.upload(file.path, {
+                //             public_id: file.filename
+                //         }).catch((error) => { console.log(error) })
+                //             .then((result) => { console.log('Successful upload to cloudinary: ', result) })
+                //         console.log('uploadResult: ', uploadResult);
+                //     })
+                // }
+                // catch {
+                //     console.log('Forbidden');
+                // }
             }
             req.body.user = req.user.id;
             //____________________ Adding links ____________________________________
