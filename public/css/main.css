@@ -547,6 +547,7 @@ li {
     display: none;
     width: 95%;
     border-radius: 0 0 15px 15px;
+    padding-bottom: 3px;
 }
 
 #signDiv a:hover {
