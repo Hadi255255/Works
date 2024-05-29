@@ -184,7 +184,7 @@ passport.use('local-signup', new localStrategy({
                             }
                             const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                             const link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
-                            console.log(link);
+                            // console.log(link);
                             // console.log('user.email 1:', user.email);
                             // ************* Send email **********************************
                             var transporter = nodemailer.createTransport({
