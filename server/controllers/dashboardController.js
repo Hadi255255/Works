@@ -337,7 +337,7 @@ exports.dashboardAddNote = async (req, res, next) => {
             layout: '../views/layouts/dashboard'
         })
     } else {
-        req.flash('inform', "You have to confirm your email.");
+        req.flash('inform', "You have to confirm your email");
         return res.redirect('back');
     }
 
