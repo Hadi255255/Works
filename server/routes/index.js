@@ -167,6 +167,7 @@ router.post('/updateUser', (req, res, next) => {
   if (req.body.email.trim() != req.user.email) {
     confirmed = 'false';
   }
+  console.log('req.body.password: ', req.body.password)
   if (req.body.password) {
     if (req.body.password.length < 6) {
       return res.status(204).send()
@@ -174,7 +175,7 @@ router.post('/updateUser', (req, res, next) => {
       newPassword = new User().hashPassword(req.body.password);
     }
   }
-  else { return res.status(204).send() }
+  else if (password) { return res.status(204).send() }
 
   if (firstName == req.user.firstName && lastName == req.user.lastName) {
     var paramsName = req.user.paramsName;
