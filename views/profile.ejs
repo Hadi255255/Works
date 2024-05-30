@@ -121,8 +121,7 @@
                                             <input type="password" name="password" id="password" minlength="6"
                                                 class="p-1  mb-1 form-control d-inline w-50 input1"
                                                 aria-describedby="helpId">
-                                            <p id="alertPassword" class="text-secondary mb-0 text-danger"
-                                                style="letter-spacing: 1px;word-spacing: 2px;">
+                                            <p id="alertPassword" class="text-secondary mb-0 text-danger">
                                             </p>
                                         </div>
                                         <% } %>
@@ -213,37 +212,7 @@
                                                                                         Female
                                                                                     </option>
                                                                                     <%}%>
-                                                                                        <% if(locals.gender=='non-binary'
-                                                                                            ){ %>
-                                                                                            <option value="non-binary"
-                                                                                                selected>
-                                                                                                None-Binary
-                                                                                            </option>
-                                                                                            <% }else{ %>
-                                                                                                <option
-                                                                                                    value="non-binary">
-                                                                                                    None-Binary
-                                                                                                </option>
-                                                                                                <%}%>
-                                                                                                    <% if(locals.gender=='none'
-                                                                                                        ){ %>
-                                                                                                        <option
-                                                                                                            value="none"
-                                                                                                            selected>
-                                                                                                            Prefer
-                                                                                                            not
-                                                                                                            to
-                                                                                                            say
-                                                                                                        </option>
-                                                                                                        <% }else{ %>
-                                                                                                            <option
-                                                                                                                value="none">
-                                                                                                                Prefer
-                                                                                                                not
-                                                                                                                to
-                                                                                                                say
-                                                                                                            </option>
-                                                                                                            <%}%>
+
                                                 </select>
                                             </div>
                                             <div class="form-group form-group1">
