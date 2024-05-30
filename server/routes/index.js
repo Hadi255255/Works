@@ -175,11 +175,11 @@ router.post('/updateUser', (req, res, next) => {
       newPassword = new User().hashPassword(req.body.password);
     }
   }
-  // else if (password) { return res.status(204).send() }
+  else if (req.body.password == "") { return res.status(204).send() }
 
   if (firstName == req.user.firstName && lastName == req.user.lastName) {
     var paramsName = req.user.paramsName;
-    if (req.body.password) {
+    if (req.body.password != undefined) {
       updateUser = {
         "email": req.body.email.trim(),
         "password": newPassword,
@@ -269,7 +269,7 @@ router.post('/updateUser', (req, res, next) => {
           paramsName = firstName.trim() + lastName.trim() + String(maxNumber + 1)
         }
         if (paramsName.includes(' ')) { paramsName = paramsName.replace(/ /g, '-') };
-        if (req.body.password) {
+        if (req.body.password != undefined) {
           updateUser = {
             "firstName": firstName.trim(),
             "lastName": lastName.trim(),
