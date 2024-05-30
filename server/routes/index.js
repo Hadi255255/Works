@@ -175,7 +175,7 @@ router.post('/updateUser', (req, res, next) => {
       newPassword = new User().hashPassword(req.body.password);
     }
   }
-  else if (password) { return res.status(204).send() }
+  // else if (password) { return res.status(204).send() }
 
   if (firstName == req.user.firstName && lastName == req.user.lastName) {
     var paramsName = req.user.paramsName;
