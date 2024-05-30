@@ -226,6 +226,8 @@ if (ltr) {
     ltr.onclick();
 }
 //_________________________ Edit Works Button ___________________________
+var password = document.getElementById('password');
+
 if (editButton) {
     editButton.onclick = function () {
         for (let i = 0; i < editControl.length; i++) {
@@ -244,7 +246,7 @@ if (editButton) {
         }
     }
 }
-if (update != null) {
+if (password && update != null) {
     update.onclick = function () {
         var n = 0; s = 0; c = 0;
         numbers.forEach((nn) => {
@@ -585,7 +587,7 @@ if (show1) {
         }
     }
 }
-if (showProfile) {
+if (showProfile && password) {
     showProfile.onclick = function () {
         if (password.type == 'text') {
             password.type = 'password';
