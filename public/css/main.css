@@ -205,13 +205,19 @@ h6 {
     background-color: lightgrey;
     font-weight: bold;
     border-radius: 15px;
-    width: fit-content;
-    max-width: 50vw;
+    /* width: fit-content; */
+    width: 40vw;
     margin: auto;
     padding: 0 15px;
     position: relative;
     top: 5px;
     word-wrap: break-word;
+}
+
+#alertPassword {
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    left: 70px !important;
 }
 
 .okey {
@@ -2147,6 +2153,13 @@ input:disabled:not(.body_work, #title) {
         height: 21px;
         top: -2px;
     }
+
+    #alertPassword {
+        letter-spacing: 0px;
+        word-spacing: 1px;
+        left: 0 !important;
+        width: 80vw;
+    }
 }
 
 /* __________________________  (max-width:500px) and (min-width:381px) _____________ */
@@ -2551,6 +2564,11 @@ input:disabled:not(.body_work, #title) {
     .viewHead2 {
         margin-top: -30px;
     }
+
+    #alertPassword {
+        left: 0 !important;
+        width: 80vw;
+    }
 }
 
 /* __________________________  (max-width:700px) and (min-width:501px) _____________ */
@@ -2877,6 +2895,11 @@ input:disabled:not(.body_work, #title) {
         position: relative;
         top: 120px;
     }
+
+    #alertPassword {
+        left: 0 !important;
+        width: 80vw;
+    }
 }
 
 /* ________________________  (min-width:700px) and (max-width:850px) ________________________ */
@@ -3147,7 +3170,7 @@ input:disabled:not(.body_work, #title) {
     #updatuser input,
     #updatuser label {
         width: 90% !important;
-        margin: 5px auto !important;
+        margin: 7px auto !important;
         text-align: left;
     }
 
@@ -3209,6 +3232,11 @@ input:disabled:not(.body_work, #title) {
     .messageViewnotes {
         position: relative;
         top: 120px;
+    }
+
+    #alertPassword {
+        left: 0 !important;
+        width: 80vw;
     }
 }
 
