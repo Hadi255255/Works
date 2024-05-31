@@ -202,6 +202,7 @@ passport.use('local-signup', new localStrategy({
                             }
                             const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                             const link = `https://works-iikg.onrender.com/confirmEmail/${user._id}/${token}`;
+                            // const link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
                             // console.log(link);
                             // console.log('user.email 1:', user.email);
                             // ************* Send email **********************************
@@ -258,7 +259,7 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "No user with this email"))
             }
             if (user && !user.password) {
-                return done(null, false, req.flash('signinError', "You can sign up, and confirm your email by clicking the link to which is sent."));
+                return done(null, false, req.flash('signinError', "You can sign up, and confirm your email by clicking the link."));
             }
             if (!user.comparePassword(password)) {
                 return done(null, false, req.flash('signinError', "Wrong password"));
