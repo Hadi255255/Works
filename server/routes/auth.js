@@ -54,27 +54,45 @@ passport.use(new GoogleStrategy({
                 const eventUpdate = {
                     signinDate: Date.now()
                 };
-                console.log('57');
                 Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
-                    .then((event) => { console.log(event) })
+                    .then((event) => {
+                        if (!event) {
+                            const newEvents = new Events({
+                                email: user.email,
+                                signupDate: Date.now(),
+                                signinDate: Date.now(),
+                            });
+                            newEvents.save();
+                        }
+                    })
                 done(null, user)
             } else {
                 User.findOne({ email: profile.emails[0].value })
                     .then((userEmail) => {
-                        if (userEmail) {
+                        if (userEmail) {     // Already signed up by email
                             const eventUpdate = {
                                 signinDate: Date.now()
                             };
                             Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
-                                .then((event) => { console.log(event) })
+                                .then((event) => {
+                                    if (!event) {
+                                        const newEvents = new Events({
+                                            email: user.email,
+                                            signupDate: Date.now(),
+                                            signinDate: Date.now(),
+                                        });
+                                        newEvents.save();
+                                    }
+                                })
                             //________ Auto sign in_______________
                             done(null, userEmail)
-                        } else {
+                        } else { // Never signed up before.
                             user = User.create(newUser)
                                 .then((user) => {
                                     const newEvents = new Events({
                                         email: user.email,
                                         signupDate: Date.now(),
+                                        signinDate: Date.now(),
                                     });
                                     newEvents.save();
                                     done(null, user)
@@ -183,7 +201,7 @@ passport.use('local-signup', new localStrategy({
                                 id: user._id
                             }
                             const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
-                            const link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
+                            const link = `https://works-iikg.onrender.com/confirmEmail/${user._id}/${token}`;
                             // console.log(link);
                             // console.log('user.email 1:', user.email);
                             // ************* Send email **********************************
@@ -252,7 +270,15 @@ passport.use('local-signin', new localStrategy({
                 signinDate: Date.now(),
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
-                .then((event) => { console.log(event) })
+                .then((event) => {
+                    if (!event) {
+                        const newEvents = new Events({
+                            email: user.email,
+                            signinDate: Date.now(),
+                        });
+                        newEvents.save();
+                    }
+                })
             return done(null, user);
         })
         .catch((err) => {
