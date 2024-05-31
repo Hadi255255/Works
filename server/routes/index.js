@@ -221,6 +221,7 @@ router.post('/updateUser', (req, res, next) => {
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                 const link = `https://works-iikg.onrender.com/confirmEmail/${req.user._id}/${token}`;
+                // const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
                 // console.log(link);
                 // ************* Send email **********************************
                 var transporter = nodemailer.createTransport({
@@ -328,6 +329,7 @@ router.post('/updateUser', (req, res, next) => {
                     }
                     const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
                     const link = `https://works-iikg.onrender.com/confirmEmail/${req.user._id}/${token}`;
+                    // const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
                     // console.log(link);
                     // ************* Send email **********************************
                     var transporter = nodemailer.createTransport({
@@ -398,6 +400,7 @@ router.post('/forgotPassword', (req, res, next) => {
         }
         const token = jwt.sign(payload, secret, { expiresIn: '15000m' });
         const link = `https://works-iikg.onrender.com/resetPassword/${user._id}/${token}`;
+        // const link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
         // console.log(link);
         // ************* Send email **********************************
         var transporter = nodemailer.createTransport({
@@ -628,7 +631,7 @@ router.post('/uploadfile', (req, res, next) => {
       // }).catch((error) => { console.log(error) })
       //   .then((result) => { console.log('Successful upload to cloudinary: ', result) })
 
-      console.log('uploadResult: ', uploadResult);
+      // console.log('uploadResult: ', uploadResult);
       User.updateOne({ _id: req.user._id }, { $set: newUser })
         .catch((err) => console.log(err))
         .then((doc) => {
@@ -1546,6 +1549,7 @@ function sendLinkFunction(req, res, next) {
     }
     const token = jwt.sign(payload, secret, { expiresIn: '1080m' });
     link = `https://works-iikg.onrender.com/confirmEmail/${user._id}/${token}`;
+    // const link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
     console.log('link: ', link);
     // ************* Send email **********************************
     var transporter = nodemailer.createTransport({
