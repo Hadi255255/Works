@@ -220,7 +220,7 @@ router.post('/updateUser', (req, res, next) => {
                   id: req.user._id
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
-                const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
+                const link = `https://works-iikg.onrender.com/confirmEmail/${req.user._id}/${token}`;
                 // console.log(link);
                 // ************* Send email **********************************
                 var transporter = nodemailer.createTransport({
@@ -327,7 +327,7 @@ router.post('/updateUser', (req, res, next) => {
                       id: req.user._id
                     }
                     const token = jwt.sign(payload, secret, { expiresIn: '1500m' });
-                    const link = `http://localhost:5000/confirmEmail/${req.user._id}/${token}`;
+                    const link = `https://works-iikg.onrender.com/confirmEmail/${req.user._id}/${token}`;
                     // console.log(link);
                     // ************* Send email **********************************
                     var transporter = nodemailer.createTransport({
@@ -397,7 +397,7 @@ router.post('/forgotPassword', (req, res, next) => {
           id: user._id
         }
         const token = jwt.sign(payload, secret, { expiresIn: '15000m' });
-        const link = `http://localhost:5000/resetPassword/${user._id}/${token}`;
+        const link = `https://works-iikg.onrender.com/resetPassword/${user._id}/${token}`;
         // console.log(link);
         // ************* Send email **********************************
         var transporter = nodemailer.createTransport({
@@ -1545,7 +1545,7 @@ function sendLinkFunction(req, res, next) {
       id: user._id
     }
     const token = jwt.sign(payload, secret, { expiresIn: '1080m' });
-    link = `http://localhost:5000/confirmEmail/${user._id}/${token}`;
+    link = `https://works-iikg.onrender.com/confirmEmail/${user._id}/${token}`;
     console.log('link: ', link);
     // ************* Send email **********************************
     var transporter = nodemailer.createTransport({
