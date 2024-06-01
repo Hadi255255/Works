@@ -268,7 +268,7 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
             const eventUpdate = {
-                signinDate: new Date()
+                signinDate: Date(+new Date().toUTCString() - +new Date().getTimezoneOffset())
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => {
