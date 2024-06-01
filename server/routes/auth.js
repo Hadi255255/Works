@@ -275,7 +275,7 @@ passport.use('local-signin', new localStrategy({
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: new Date(),
+                            signinDate: new Date() + new Date().getTimezoneOffset()
                         });
                         newEvents.save();
                     }
