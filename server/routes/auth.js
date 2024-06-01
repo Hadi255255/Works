@@ -52,15 +52,15 @@ passport.use(new GoogleStrategy({
             let user = await User.findOne({ googleId: profile.id })
             if (user) {
                 const eventUpdate = {
-                    signinDate: Date.now()
+                    signinDate: new Date().toLocaleString(),
                 };
                 Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                     .then((event) => {
                         if (!event) {
                             const newEvents = new Events({
                                 email: user.email,
-                                signupDate: Date.now(),
-                                signinDate: Date.now(),
+                                signupDate: new Date().toLocaleString(),
+                                signinDate: new Date().toLocaleString(),
                             });
                             newEvents.save();
                         }
@@ -71,15 +71,15 @@ passport.use(new GoogleStrategy({
                     .then((userEmail) => {
                         if (userEmail) {     // Already signed up by email
                             const eventUpdate = {
-                                signinDate: Date.now()
+                                signinDate: new Date().toLocaleString(),
                             };
                             Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
                                 .then((event) => {
                                     if (!event) {
                                         const newEvents = new Events({
                                             email: user.email,
-                                            signupDate: Date.now(),
-                                            signinDate: Date.now(),
+                                            signupDate: new Date().toLocaleString(),
+                                            signinDate: new Date().toLocaleString(),
                                         });
                                         newEvents.save();
                                     }
@@ -91,8 +91,8 @@ passport.use(new GoogleStrategy({
                                 .then((user) => {
                                     const newEvents = new Events({
                                         email: user.email,
-                                        signupDate: Date.now(),
-                                        signinDate: Date.now(),
+                                        signupDate: new Date().toLocaleString(),
+                                        signinDate: new Date().toLocaleString(),
                                     });
                                     newEvents.save();
                                     done(null, user)
@@ -234,7 +234,7 @@ passport.use('local-signup', new localStrategy({
                             // console.log('newUser: ', user)
                             const newEvents = new Events({
                                 email: user.email,
-                                signupDate: Date.now(),
+                                signupDate: new Date().toLocaleString(),
                             });
                             newEvents.save();
                             return done(null, user, req.flash('signSuccess', 'Successfully created a new user.'), req.flash('inform', 'A confirmation link has been sent to your email.'))
@@ -268,14 +268,14 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
             const eventUpdate = {
-                signinDate: Date.now(),
+                signinDate: new Date().toLocaleString()
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => {
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: Date.now(),
+                            signinDate: new Date().toLocaleString(),
                         });
                         newEvents.save();
                     }
