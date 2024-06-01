@@ -19,17 +19,17 @@
                 </td>
                 <td>
                     <p>
-                        <%= String(event.signupDate).slice(0,25)%>
+                        <%= Date(event.signupDate).slice(0,25)%>
                     </p>
                 </td>
                 <td>
                     <p>
-                        <%= String(event.signinDate).slice(0,25)%>
+                        <%= Date(event.signinDate).slice(0,25)%>
                     </p>
                 </td>
                 <td>
                     <p>
-                        <%= String(event.deleteAccountDate).slice(0,25)%>
+                        <%= Date(event.deleteAccountDate).slice(0,25)%>
                     </p>
                 </td>
 
@@ -40,4 +40,3 @@
     </table>
 
     <%}%>
-
