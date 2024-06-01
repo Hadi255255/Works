@@ -52,15 +52,15 @@ passport.use(new GoogleStrategy({
             let user = await User.findOne({ googleId: profile.id })
             if (user) {
                 const eventUpdate = {
-                    signinDate: new Date().toLocaleString(),
+                    signinDate: new Date(),
                 };
                 Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                     .then((event) => {
                         if (!event) {
                             const newEvents = new Events({
                                 email: user.email,
-                                signupDate: new Date().toLocaleString(),
-                                signinDate: new Date().toLocaleString(),
+                                signupDate: new Date(),
+                                signinDate: new Date(),
                             });
                             newEvents.save();
                         }
@@ -71,15 +71,15 @@ passport.use(new GoogleStrategy({
                     .then((userEmail) => {
                         if (userEmail) {     // Already signed up by email
                             const eventUpdate = {
-                                signinDate: new Date().toLocaleString(),
+                                signinDate: new Date(),
                             };
                             Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
                                 .then((event) => {
                                     if (!event) {
                                         const newEvents = new Events({
                                             email: user.email,
-                                            signupDate: new Date().toLocaleString(),
-                                            signinDate: new Date().toLocaleString(),
+                                            signupDate: new Date(),
+                                            signinDate: new Date(),
                                         });
                                         newEvents.save();
                                     }
@@ -91,8 +91,8 @@ passport.use(new GoogleStrategy({
                                 .then((user) => {
                                     const newEvents = new Events({
                                         email: user.email,
-                                        signupDate: new Date().toLocaleString(),
-                                        signinDate: new Date().toLocaleString(),
+                                        signupDate: new Date(),
+                                        signinDate: new Date(),
                                     });
                                     newEvents.save();
                                     done(null, user)
@@ -268,14 +268,14 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
             const eventUpdate = {
-                signinDate: new Date().toLocaleString()
+                signinDate: new Date()
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => {
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: new Date().toLocaleString(),
+                            signinDate: new Date(),
                         });
                         newEvents.save();
                     }
