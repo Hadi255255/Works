@@ -268,14 +268,14 @@ passport.use('local-signin', new localStrategy({
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
             const eventUpdate = {
-                signinDate: new Date() + new Date().getTimezoneOffset()
+                signinDate: Date.now()
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => {
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: new Date() + new Date().getTimezoneOffset()
+                            signinDate:  Date.now()
                         });
                         newEvents.save();
                     }
