@@ -50,17 +50,34 @@ passport.use(new GoogleStrategy({
         }
         try {
             let user = await User.findOne({ googleId: profile.id })
+            // set the date to show in PST timezone
+            let date = new Date();
+            let timezoneOffset = date.getTimezoneOffset();
+            let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
+            let adjustedTime = new Date(date.getTime() + (pstOffset + timezoneOffset) * 60 * 1000);
+
+            // display the date and time in PST timezone
+            let options = {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                // timeZone: 'Asia/Damascus'
+            };
+            let pstDateTime = adjustedTime.toLocaleString('en-US', options);
             if (user) {
                 const eventUpdate = {
-                    signinDate: new Date(),
+                    signinDate: String(pstDateTime),
                 };
                 Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                     .then((event) => {
                         if (!event) {
                             const newEvents = new Events({
                                 email: user.email,
-                                signupDate: new Date(),
-                                signinDate: new Date(),
+                                signupDate: String(pstDateTime),
+                                signinDate: String(pstDateTime),
                             });
                             newEvents.save();
                         }
@@ -71,15 +88,15 @@ passport.use(new GoogleStrategy({
                     .then((userEmail) => {
                         if (userEmail) {     // Already signed up by email
                             const eventUpdate = {
-                                signinDate: new Date(),
+                                signinDate: String(pstDateTime),
                             };
                             Events.findOneAndUpdate({ email: userEmail.email }, { $set: eventUpdate }, { $upset: true })
                                 .then((event) => {
                                     if (!event) {
                                         const newEvents = new Events({
                                             email: user.email,
-                                            signupDate: new Date(),
-                                            signinDate: new Date(),
+                                            signupDate: String(pstDateTime),
+                                            signinDate: String(pstDateTime),
                                         });
                                         newEvents.save();
                                     }
@@ -91,8 +108,8 @@ passport.use(new GoogleStrategy({
                                 .then((user) => {
                                     const newEvents = new Events({
                                         email: user.email,
-                                        signupDate: new Date(),
-                                        signinDate: new Date(),
+                                        signupDate: String(pstDateTime),
+                                        signinDate: String(pstDateTime),
                                     });
                                     newEvents.save();
                                     done(null, user)
@@ -231,10 +248,27 @@ passport.use('local-signup', new localStrategy({
                                 }
                             });
                             // *************** End Sending email ***************************
-                            // console.log('newUser: ', user)
+                            // set the date to show in PST timezone
+                            let date = new Date();
+                            let timezoneOffset = date.getTimezoneOffset();
+                            let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
+                            let adjustedTime = new Date(date.getTime() + (pstOffset + timezoneOffset) * 60 * 1000);
+
+                            // display the date and time in PST timezone
+                            let options = {
+                                day: 'numeric',
+                                month: 'numeric',
+                                year: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                                // timeZone: 'Asia/Damascus'
+                            };
+                            let pstDateTime = adjustedTime.toLocaleString('en-US', options);
+
                             const newEvents = new Events({
                                 email: user.email,
-                                signupDate: new Date().toLocaleString(),
+                                signupDate: String(pstDateTime),
                             });
                             newEvents.save();
                             return done(null, user, req.flash('signSuccess', 'Successfully created a new user.'), req.flash('inform', 'A confirmation link has been sent to your email.'))
@@ -293,7 +327,7 @@ passport.use('local-signin', new localStrategy({
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: pstDateTime,
+                            signinDate: String(pstDateTime),
                         });
                         newEvents.save();
                     }
