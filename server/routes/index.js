@@ -814,10 +814,27 @@ router.post('/deleteAccount', (req, res, next) => {
         })
       } else {
         const userId = req.user._id;
-        const signinDate = {
-          deleteAccountDate: new Date()
+        // set the date to show in PST timezone
+        let date = new Date();
+        let timezoneOffset = date.getTimezoneOffset();
+        let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
+        let adjustedTime = new Date(date.getTime() + (pstOffset + timezoneOffset) * 60 * 1000);
+
+        // display the date and time in PST timezone
+        let options = {
+          day: 'numeric',
+          month: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          // timeZone: 'Asia/Damascus'
         };
-        Events.findOneAndUpdate({ email: req.user.email }, { $set: signinDate }, { $upset: true })
+        let pstDateTime = adjustedTime.toLocaleString('en-US', options);
+        const deletedDate = {
+          deleteAccountDate: String(pstDateTime)
+        };
+        Events.findOneAndUpdate({ email: req.user.email }, { $set: deletedDate }, { $upset: true })
           .then((event) => { console.log(event) })
         const doc = User.deleteOne({ _id: userId })
           .then((deleted) => {
@@ -833,7 +850,6 @@ router.post('/deleteAccount', (req, res, next) => {
 
       }
     })
-
 });
 
 router.post('/deleteUser/:id', (req, res, next) => {
