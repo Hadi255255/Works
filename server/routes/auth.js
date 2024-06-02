@@ -283,7 +283,7 @@ passport.use('local-signin', new localStrategy({
                 second: 'numeric',
                 // timeZone: 'Asia/Damascus'
             };
-            let pstDateTime = date.toLocaleString('en-US', options);
+            let pstDateTime = adjustedTime.toLocaleString('en-US', options);
             console.log('pstDateTime: ', pstDateTime); // Output: 2/16/2022, 11:01:20 AM
             const eventUpdate = {
                 signinDate: String(pstDateTime)
