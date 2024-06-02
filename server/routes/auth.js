@@ -267,15 +267,33 @@ passport.use('local-signin', new localStrategy({
             if (req.body.email == '') {
                 return done(null, false, req.flash('signinError', "Insert your email"))
             };
+            // set the date to show in PST timezone
+            let date = new Date();
+            let timezoneOffset = date.getTimezoneOffset();
+            let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
+            let adjustedTime = new Date(date.getTime() + (pstOffset + timezoneOffset) * 60 * 1000);
+
+            // display the date and time in PST timezone
+            let options = {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                // timeZone: 'Asia/Damascus'
+            };
+            let pstDateTime = date.toLocaleString('en-US', options);
+            console.log('pstDateTime: ', pstDateTime); // Output: 2/16/2022, 11:01:20 AM
             const eventUpdate = {
-                signinDate: new Date()
+                signinDate: String(pstDateTime)
             };
             Events.findOneAndUpdate({ email: user.email }, { $set: eventUpdate }, { $upset: true })
                 .then((event) => {
                     if (!event) {
                         const newEvents = new Events({
                             email: user.email,
-                            signinDate: new Date(),
+                            signinDate: pstDateTime,
                         });
                         newEvents.save();
                     }
