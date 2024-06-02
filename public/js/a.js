@@ -26,20 +26,28 @@ var capital = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 
 
 
-li_6.onclick = function () {
-    document.body.onclick = 'none'
-    if (signDiv.style.display == 'block') {
-        signDiv.style.display = 'none'
-    } else {
-        signDiv.style.display = 'block';
-    }
+// li_6.onclick = li_6.onmouseover = function () {
+//     document.body.onclick = 'none'
+//     if (signDiv.style.display == 'block') {
+//         signDiv.style.display = 'none'
+//     } else {
+//         signDiv.style.display = 'block';
+//     }
+// }
+// li_6.onmouseleave = function () {
+//     document.body.onclick = function () {
+//         if (signDiv.style.display == 'block') {
+//             signDiv.style.display = 'none';
+//         }
+//     }
+// }
+li_6.onmouseover = function () {
+    signDiv.style.top = '0px';
+    signDiv.style.visibility = 'visible';
 }
 li_6.onmouseleave = function () {
-    document.body.onclick = function () {
-        if (signDiv.style.display == 'block') {
-            signDiv.style.display = 'none';
-        }
-    }
+    signDiv.style.top = '-120px';
+    signDiv.style.visibility = 'hidden';
 }
 if (document.body.innerHTML.includes("Home!")) {
     home.classList.add('open');
