@@ -7,13 +7,13 @@ const eventSchema = mongoose.Schema({
         type: String,
     },
     signupDate: {
-        type: Date,
+        type: String,
     },
     signinDate: {
-        type: Date,
+        type: String,
     },
     deleteAccountDate: {
-        type: Date,
+        type: String,
     },
 },);
 const Events = mongoose.model('Events', eventSchema);
