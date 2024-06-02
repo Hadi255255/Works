@@ -603,10 +603,15 @@ var uploadResume = multer({
 }).single('resume');
 
 router.get('/events', isDirector, (req, res) => {
-  var login;
-  if (req.user) { login = true } else { login = false }
+  var login, paramsName;
+  if (req.user) {
+    login = true; paramsName = req.user.paramsName;
+    console.log('paramsName: ', paramsName)
+  } else { login = false }
   Events.find({}).then((events) => {
-    res.render('events', { events: events, login: login })
+    res.render('events', {
+      events: events, login: login, paramsNameAdmin: paramsName,
+    })
   });
 
 });
