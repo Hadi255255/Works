@@ -305,7 +305,7 @@ passport.use('local-signin', new localStrategy({
             let date = new Date();
             let timezoneOffset = date.getTimezoneOffset();
             let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
-            let adjustedTime = new Date();
+           let adjustedTime = new Date(+date + +timezoneOffset);
 
             // display the date and time in PST timezone
             let options = {
