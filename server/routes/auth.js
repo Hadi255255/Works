@@ -305,7 +305,7 @@ passport.use('local-signin', new localStrategy({
             // set the date to show in PST timezone
             let date = new Date();
             console.log("date: ", date)
-            let timezoneOffset = -date.getTimezoneOffset();
+            let timezoneOffset = date.getTimezoneOffset();
             console.log('timezoneOffset1: ', timezoneOffset)
             // console.log('user.timeZone: ', user.timeZone)
             // if (user.timeZone && user.timeZone != '' && user.timezone != undefined) {
