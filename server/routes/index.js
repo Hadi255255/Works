@@ -91,6 +91,17 @@ router.post('/updateUser', (req, res, next) => {
   var confirmed = req.user.confirmed;
   var messageSuccess = req.flash('updateSuccess');
   var messageInform = req.flash('inform');
+  var timeZone;
+  if (req.body.timeZone && req.body.timeZone != '' && req.body.timeZone != null && req.body.timeZone != undefined) {
+    timeZone = +req.body.timeZone * 60;
+  } else {
+    timeZone=''
+  }
+
+  console.log('req.body.timeZone:  ', req.body.timeZone);
+  console.log('timeZone update:  ', timeZone);
+
+
   if (req.body.birthday) {
     birthday = String(req.body.birthday);
   } else { birthday = req.user.birthday }
@@ -190,6 +201,7 @@ router.post('/updateUser', (req, res, next) => {
         "gender": gender,
         "location": location,
         "birthday": birthday,
+        "timeZone": timeZone,
       }
     } else {
       updateUser = {
@@ -201,6 +213,7 @@ router.post('/updateUser', (req, res, next) => {
         "gender": gender,
         "location": location,
         "birthday": birthday,
+        "timeZone": timeZone,
       }
     }
     User.findOne({ email: req.body.email.trim() })
@@ -285,6 +298,7 @@ router.post('/updateUser', (req, res, next) => {
             "gender": gender,
             "location": location,
             "birthday": birthday,
+            "timeZone": timeZone,
           };
           if (req.body.password.length < 6) {
             req.flash('signinError', "Minimum password's length is 6. ");
@@ -305,6 +319,7 @@ router.post('/updateUser', (req, res, next) => {
             "gender": gender,
             "location": location,
             "birthday": birthday,
+            "timeZone": timeZone,
           };
         }
         User.findOne({ email: req.body.email.trim() })
@@ -1180,7 +1195,7 @@ router.post('/sendMessage', (req, res, next) => {
 });
 router.get('/:user', (req, res, next) => {
   var admin = login = confirmed = director = false;
-  var userName, userID, email, firstName, lastName, image, speciality, education, skills, paramsName, location, gender, birthday, messagesError, messageSuccess, messageInform, password, paramsNameAdmin;
+  var userName, userID, email, firstName, lastName, image, speciality, education, skills, paramsName, location, gender, birthday, messagesError, messageSuccess, messageInform, password, paramsNameAdmin, timeZone;
   var messagesError = messageSuccess = messageInform = '';
   User.find({})
     .then((users) => {
@@ -1189,8 +1204,11 @@ router.get('/:user', (req, res, next) => {
         messagesError = req.flash('signinError');
         messageSuccess = req.flash('updateSuccess');
         messageInform = req.flash('inform');
-        login = true; confirmed = req.user.confirmed;
+        login = true;
+        confirmed = req.user.confirmed;
         password = req.user.password;
+        timeZone = req.user.timeZone;
+        console.log("timeZone : ", timeZone)
         if (req.user.email == "engineer.shadirahhal@gmail.com") {
           director = 'yes';
         } else { director = '' }
@@ -1213,6 +1231,7 @@ router.get('/:user', (req, res, next) => {
           birthday = user.birthday;
           gender = user.gender;
           location = user.location;
+          timeZone = user.timeZone;
           if (req.user) {
             paramsNameAdmin = req.user.paramsName;
             login = true; confirmed = req.user.confirmed;
@@ -1250,6 +1269,7 @@ router.get('/:user', (req, res, next) => {
         birthday: birthday,
         gender: gender,
         location: location,
+        timeZone: timeZone,
       }
       if (req.params.user == 'contact') { return res.render('./contact') }
       if (userID == null) {
