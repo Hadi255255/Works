@@ -95,7 +95,7 @@ router.post('/updateUser', (req, res, next) => {
   if (req.body.timeZone && req.body.timeZone != '' && req.body.timeZone != null && req.body.timeZone != undefined) {
     timeZone = +req.body.timeZone * 60;
   } else {
-    timeZone=''
+    timeZone = ''
   }
 
   console.log('req.body.timeZone:  ', req.body.timeZone);
@@ -831,11 +831,7 @@ router.post('/deleteAccount', (req, res, next) => {
         const userId = req.user._id;
         // set the date to show in PST timezone
         let date = new Date();
-        let timezoneOffset = date.getTimezoneOffset();
-        let pstOffset = -480; // this is the offset for the Pacific Standard Time timezone
-        let adjustedTime = new Date(date.getTime() + (pstOffset + timezoneOffset) * 60 * 1000);
-
-        // display the date and time in PST timezone
+        let timezoneOffset, pstDateTime, adjustedTime;
         let options = {
           day: 'numeric',
           month: 'numeric',
@@ -845,12 +841,29 @@ router.post('/deleteAccount', (req, res, next) => {
           second: 'numeric',
           // timeZone: 'Asia/Damascus'
         };
-        let pstDateTime = adjustedTime.toLocaleString('en-US', options);
-        const deletedDate = {
-          deleteAccountDate: String(pstDateTime)
+        if (req.user.timeZone != null && req.user.timeZone != undefined && req.user.timeZone != "") {
+          timezoneOffset = req.user.timeZone;
+          adjustedTime = new Date(+date + +timezoneOffset * 60 * 1000);
+          pstDateTime = adjustedTime.toUTCString();
+        } else {
+          timezoneOffset = -date.getTimezoneOffset();
+          adjustedTime = new Date();
+          pstDateTime = adjustedTime.toLocaleDateString('en-US', options);
+        }
+        const eventUpdate = {
+          signinDate: String(pstDateTime)
         };
-        Events.findOneAndUpdate({ email: req.user.email }, { $set: deletedDate }, { $upset: true })
-          .then((event) => { console.log(event) })
+        Events.findOneAndUpdate({ email: req.user.email }, { $set: eventUpdate }, { $upset: true })
+          .then((event) => {
+            if (!event) {
+              const newEvents = new Events({
+                email: req.user.email,
+                signinDate: String(pstDateTime),
+              });
+              newEvents.save();
+            }
+          })
+
         const doc = User.deleteOne({ _id: userId })
           .then((deleted) => {
             req.logOut(() => {
