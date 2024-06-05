@@ -84,9 +84,11 @@ const userSchema = mongoose.Schema({
     },
     location: {
         type: String,
+    },
+    timeZone: {
+        type: String,
     }
-},
-);
+},);
 userSchema.methods.hashPassword = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(5), null);
 };
