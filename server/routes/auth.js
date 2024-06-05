@@ -304,16 +304,7 @@ passport.use('local-signin', new localStrategy({
             };
             // set the date to show in PST timezone
             let date = new Date();
-            console.log("date: ", date)
-            let timezoneOffset = date.getTimezoneOffset();
-            console.log('timezoneOffset1: ', timezoneOffset)
-            // console.log('user.timeZone: ', user.timeZone)
-            // if (user.timeZone && user.timeZone != '' && user.timezone != undefined) {
-            //     timezoneOffset = +(user.timeZone)
-            // }
-            let adjustedTime = new Date(+date + +timezoneOffset * 60 * 1000);
-
-            // console.log('adjustedTime: ', adjustedTime)
+            let timezoneOffset, pstDateTime, adjustedTime;
             let options = {
                 day: 'numeric',
                 month: 'numeric',
@@ -323,8 +314,15 @@ passport.use('local-signin', new localStrategy({
                 second: 'numeric',
                 // timeZone: 'Asia/Damascus'
             };
-            let pstDateTime = adjustedTime.toLocaleString('en-US', options);
-            console.log('pstDateTime: ', pstDateTime); // Output: 2/16/2022, 11:01:20 AM
+            if (user.timeZone != null && user.timeZone != undefined && user.timeZone != "") {
+                timezoneOffset = user.timeZone;
+                adjustedTime = new Date(+date + +timezoneOffset * 60 * 1000);
+                pstDateTime = adjustedTime.toUTCString();
+            } else {
+                timezoneOffset = -date.getTimezoneOffset();
+                adjustedTime = new Date();
+                pstDateTime = adjustedTime.toLocaleDateString('en-US', options);
+            }
             const eventUpdate = {
                 signinDate: String(pstDateTime)
             };
