@@ -113,9 +113,28 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
     uploadadd(req, res, function (err) {
         var updateNote, firstFileType, reqFiles;
         const userParamsName = req.user.paramsName;
-        var updatedAt = +(Date.now());
-        updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
-        // console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
+        // set the date to show in PST timezone
+        let date = new Date();
+        let timezoneOffset, pstDateTime, adjustedTime;
+        let options = {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            // timeZone: 'Asia/Damascus'
+        };
+        if (req.user.timeZone != null && req.user.timeZone != undefined && req.user.timeZone != "") {
+            timezoneOffset = req.user.timeZone;
+            adjustedTime = new Date(+date + +timezoneOffset * 60 * 1000);
+            pstDateTime = adjustedTime.toUTCString();
+            updatedAt = String(pstDateTime)
+        } else {
+            var updatedAt = +(Date.now());
+            updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
+        }
+        // End setting date
         var inputValue = req.body.inputValue;
         var inputTitle = req.body.inputTitle;
         var linksValuesArray = [];
@@ -367,8 +386,28 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
             if (err) { res.send("Somthing Error") }
             var reqFiles, image, updateUser, firstFileType, updatedAt, createdAt;
             var userParamsName = req.user.paramsName;
-            updatedAt = createdAt = +(Date.now());
-            updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
+            // set the date to show in PST timezone
+            let date = new Date();
+            let timezoneOffset, pstDateTime, adjustedTime;
+            let options = {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                // timeZone: 'Asia/Damascus'
+            };
+            if (req.user.timeZone != null && req.user.timeZone != undefined && req.user.timeZone != "") {
+                timezoneOffset = req.user.timeZone;
+                adjustedTime = new Date(+date + +timezoneOffset * 60 * 1000);
+                pstDateTime = adjustedTime.toUTCString();
+                updatedAt = createdAt = String(pstDateTime)
+            } else {
+                updatedAt = createdAt = +(Date.now());
+                updatedAt -= +(new Date().getTimezoneOffset()) * 60 * 1000;
+            }
+            // End setting date
             if (req.files.length == 0) { reqFiles = [] }
             else {
                 reqFiles = req.files;
@@ -389,7 +428,7 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
             }
             req.body.user = req.user.id;
             //____________________ Adding links ____________________________________
-            console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
+            // console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
             var inputValue = req.body.inputValue;
             var inputTitle = req.body.inputTitle;
             var linksValuesArray = [];
