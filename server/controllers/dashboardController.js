@@ -215,7 +215,7 @@ exports.dashboardAddImages = async (req, res, next) => { // UpdateNote
                         return res.redirect('back')
                     });
                 if (!doc) { console.log('Not Successful: no doc') }
-                else { console.log('Successfully updated: ', doc) }
+
             })
     })
 }
@@ -325,9 +325,7 @@ exports.dashboardDeleteAllNotes = (req, res, next) => {
                 })
             })
         const doc = Note.deleteMany({ user: req.user._id })
-            .then((Successful) => {
-                console.log('Successful deleted !: ', Successful)
-            });
+            .then((Successful) => { });
         if (!doc) { console.log('Not Successful: no doc') }
         else { req.flash('updateSuccess', "Successfully deleted !"); }
         return res.redirect('../../' + userParamsName + '/works')
@@ -337,10 +335,9 @@ exports.dashboardDeleteAllNotes = (req, res, next) => {
 }
 exports.dashboardAddNote = async (req, res, next) => {
     var messageInform = req.flash('inform');
-    var login, director, images, groupImages1;
+    var login, director, images, groupImages1, paramsName, paramsNameAdmin;
     if (req.user) {
         login = true; userName = req.user.firstName;
-        paramsNameAdmin = req.user.paramsName;
     }
     else { login = false; paramsNameAdmin = 'signin' }
     if (req.user.email == "engineer.shadirahhal@gmail.com") {
@@ -359,7 +356,7 @@ exports.dashboardAddNote = async (req, res, next) => {
             }
         })
     const locals = {
-        paramsNameAdmin: paramsNameAdmin,
+        paramsName: req.params.paramsName, 
         groupImages1: groupImages1,
         images: images,
         login: login,
@@ -428,7 +425,6 @@ exports.dashboardAddNoteSubmit = async (req, res, next) => {
             }
             req.body.user = req.user.id;
             //____________________ Adding links ____________________________________
-            // console.log(' typeof req.body.inputValue: ', typeof req.body.inputValue)
             var inputValue = req.body.inputValue;
             var inputTitle = req.body.inputTitle;
             var linksValuesArray = [];
@@ -489,7 +485,6 @@ exports.dashboardDeleteLink = (req, res, next) => {
     if (typeof req.body.paramsWork == 'string') {
         paramsID = req.body.paramsWork;
     } else {
-        console.log('typeof req.body.paramsWork: ', typeof req.body.paramsWork)
         paramsID = req.body.paramsWork[0];
     }
     var linkNumber = req.body.n
