@@ -897,13 +897,14 @@ td:first-of-type:not(.notes) {
 
 .inform {
     position: relative;
-    top: 15px;
+    top: 0px;
     text-align: center;
     word-wrap: break-word;
     width: fit-content;
     animation: show 2s linear;
     box-shadow: 3px 3px 10px darkblue !important;
     font-size: medium;
+    z-index: 1;
 }
 
 .messageViewnotes {
