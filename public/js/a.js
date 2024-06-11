@@ -41,14 +41,20 @@ var capital = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
 //         }
 //     }
 // }
+
 li_6.onmouseover = function () {
-    signDiv.style.top = '0px';
-    signDiv.style.visibility = 'visible';
+    if (signDiv) {
+        signDiv.style.top = '0px';
+        signDiv.style.visibility = 'visible';
+    }
 }
 li_6.onmouseleave = function () {
-    signDiv.style.top = '-120px';
-    signDiv.style.visibility = 'hidden';
+    if (signDiv) {
+        signDiv.style.top = '-120px';
+        signDiv.style.visibility = 'hidden';
+    }
 }
+
 if (document.body.innerHTML.includes("Home!")) {
     home.classList.add('open');
     if (profile) {
@@ -619,12 +625,21 @@ var bodyNewDiv = document.getElementById('bodyNewDiv');
 if (addLink) {
     addLink.onclick = function () {
         var linkValue = prompt("Add your link here:");
-        if (!linkValue) { return }
+        if (!linkValue || linkValue.length < 5) {
+            alert("Add correct link")
+            setTimeout(() => {
+                window.scroll({ left: 0, top: 0 })
+            }, 1)
+            return
+        }
         if (linkValue.length > 4) {
             var linkTitle = prompt("Add the title of your link:");
         }
-        if (!linkTitle) { return }
-        if (linkTitle.length < 1) {
+        if (!linkTitle || linkTitle.length < 1) {
+            alert("Add a title for your link");
+            setTimeout(() => {
+                window.scroll({ left: 0, top: 0 })
+            }, 1);
             return
         }
         var links = document.createElement('div');
