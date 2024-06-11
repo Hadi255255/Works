@@ -285,7 +285,7 @@ exports.dashboardDeleteNote = (req, res, next) => {
     try {
         Note.findOne({ _id: req.body.note_id })
             .then((note) => {
-                if (note.groupImages.length > 0) {
+                if (note.groupImages && note.groupImages.length > 0) {
                     note.groupImages.forEach(img => {
                         fs.unlink('./' + img.path, (err) => { })
                         // try {
@@ -338,6 +338,7 @@ exports.dashboardAddNote = async (req, res, next) => {
     var login, director, images, groupImages1, paramsName, paramsNameAdmin;
     if (req.user) {
         login = true; userName = req.user.firstName;
+        paramsNameAdmin = req.user.paramsName;
     }
     else { login = false; paramsNameAdmin = 'signin' }
     if (req.user.email == "engineer.shadirahhal@gmail.com") {
@@ -356,7 +357,8 @@ exports.dashboardAddNote = async (req, res, next) => {
             }
         })
     const locals = {
-        paramsName: req.params.paramsName, 
+        paramsNameAdmin: paramsNameAdmin,
+        paramsName: req.params.paramsName,
         groupImages1: groupImages1,
         images: images,
         login: login,
