@@ -425,7 +425,7 @@ h6 {
 
 .note {
     width: 23vw;
-    box-shadow: 1px 1px 5px 3px rgb(80, 20, 20);
+    box-shadow: 2px 2px 5px 4px rgb(80, 80, 80);
     padding: 8px;
     border-radius: 15px;
     background-image: repeating-linear-gradient(-45deg, rgb(80, 0, 20), rgb(180, 180, 80) 1px);
@@ -575,15 +575,14 @@ li {
 
 }
 
-
-#signDiv a:hover {
+border: none #signDiv a:hover {
     background-color: rgb(190, 190, 190) !important;
-    border: none;
+    /* border: none; */
 }
 
 #signDiv a:active {
     background-color: rgb(170, 170, 170) !important;
-    border: none;
+    /* border: none; */
 }
 
 #submit {
@@ -773,8 +772,11 @@ table:not(.notes, .allusers) {
 }
 
 .allusers {
-    border: 2px grey solid;
     width: 90vw;
+}
+
+.allusers th {
+    border-radius: 20px 20px 0 0 !important;
 }
 
 .notes {
