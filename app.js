@@ -90,8 +90,14 @@ app.use('/', require('./server/routes/index'));
 app.use('/', require('./server/routes/dashboard'));
 
 app.get('*', (req, res) => {
-    // res.status(404).send("Page not found...");
-    res.status(404).render('404')
+    var login, paramsName;
+    if (req.user) { login = true; paramsName = req.user.paramsName }
+    else { login = false; paramsName = "users" }
+    res.status(404).render('404', {
+        login: login,
+        paramsName: paramsName,
+        paramsNameAdmin: paramsName,
+    })
 })
 
 app.listen(port, () => {
