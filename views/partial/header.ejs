@@ -1,6 +1,6 @@
 <center>
   <header class="header-main p-0" style="height: 36px; padding-top: 0;">
-    <% if(locals.login){ %>
+    <% if(locals.login==true){ %>
       <div class="back">
         <ul id="headerDiv" class="nav">
           <% }else{%>
@@ -10,7 +10,7 @@
                   <li id="li_1"><a href="/" id="home" class="nav-link px-2 btn fw-bold headerItem">
                       Home</a></li>
                   <li id="li_2"><a href=" /users" id="users" class="nav-link px-2 btn headerItem">Users</a></li>
-                  <% if(locals.login){ %>
+                  <% if(locals.login==true){ %>
                     <li id="li_3"><a href=" /<%=locals.paramsNameAdmin %>" id="profile"
                         class="nav-link px-2 btn headerItem">Profile</a>
                     </li>
@@ -25,21 +25,21 @@
                       </li>
                       <li id="li_6">
                         <div class=" signDiv1" id="signDiv1">
-                          <% if(!locals.login){ %>
-                            <p class="signing nav-link btn headerItem" style="font-size: 22px;">Sign Up/In</p>
-                            <div id="signDiv" class="">
-                              <a href="/signup" type="button" class="btn bg-secondary-subtle sign">Sign Up</a><br />
-                              <a href="/signin" type="button" class="btn sign">Sign In</a><br />
-                              <a href="/auth/google" type="button" class="btn bg-secondary-subtle sign">Sign Up/In
-                                <img src="/img/g-logo.jpg" width="20px" id="g-logo" class='rounded-5' alt="">
-                              </a>
+                          <% if(locals.login==true){ %>
+                            <div id="logout">
+                              <a href="/logout" type="button" class="nav-link signing btn headerItem">Logout</a>
                             </div>
-                            <% } %>
-                              <% if(locals.login){ %>
-                                <div id="logout">
-                                  <a href="/logout" type="button" class="nav-link signing btn headerItem">Logout</a>
-                                </div>
-                                <% } %>
+                            <% }else{ %>
+                              <p class="signing nav-link btn headerItem" style="font-size: 22px;">Sign Up/In</p>
+                              <div id="signDiv" class="">
+                                <a href="/signup" type="button" class="btn bg-secondary-subtle sign">Sign
+                                  Up</a><br />
+                                <a href="/signin" type="button" class="btn sign">Sign In</a><br />
+                                <a href="/auth/google" type="button" class="btn bg-secondary-subtle sign">Sign Up/In
+                                  <img src="/img/g-logo.jpg" width="20px" id="g-logo" class='rounded-5' alt="">
+                                </a>
+                              </div>
+                              <% } %>
                         </div>
                       </li>
               </ul>
