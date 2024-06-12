@@ -622,52 +622,73 @@ if (showProfile && password) {
 var addLink = document.getElementById('addLink');
 var textareaLink = document.getElementById('textareaLink');
 var bodyNewDiv = document.getElementById('bodyNewDiv');
+var Scroll;
 if (addLink) {
     addLink.onclick = function () {
         var linkValue = prompt("Add your link here:");
-        if (!linkValue || linkValue.length < 5) {
-            alert("Add correct link")
-            setTimeout(() => {
-                window.scroll({ left: 0, top: 0 })
-            }, 1)
-            return
-        }
-        if (linkValue.length > 4) {
-            var linkTitle = prompt("Add the title of your link:");
-        }
-        if (!linkTitle || linkTitle.length < 1) {
-            alert("Add a title for your link");
-            setTimeout(() => {
+        if (linkValue == undefined) {
+            Scroll = setTimeout(() => {
                 window.scroll({ left: 0, top: 0 })
             }, 1);
+            return;
+        }
+        clearTimeout(Scroll);
+        if (linkValue.length < 5) {
+            alert("Add correct link")
+            Scroll = setTimeout(() => {
+                window.scroll({ left: 0, top: 0 })
+            }, 1);
+            addLink.onclick();
             return
         }
-        var links = document.createElement('div');
-        var link = document.createElement('a');
-        var br = document.createElement('br');
-        var contentTitle = document.createTextNode(linkTitle);
-        var inputValue = document.createElement('input');
-        var inputTitle = document.createElement('input');
-        inputValue.setAttribute('value', linkValue);
-        inputValue.setAttribute('name', 'inputValue');
-        inputValue.setAttribute('hidden', true);
-        inputTitle.setAttribute('value', linkTitle);
-        inputTitle.setAttribute('name', 'inputTitle');
-        inputTitle.setAttribute('hidden', true);
+        clearTimeout(Scroll);
+        function title() {
+            if (linkValue.length > 4) {
+                var linkTitle = prompt("Add the title of your link:");
+            }
+            if (linkTitle == undefined) {
+                Scroll = setTimeout(() => {
+                    window.scroll({ left: 0, top: 0 })
+                }, 1);
+                return;
+            }
+            if (linkTitle.length < 1) {
+                alert("Add a title for your link");
+                Scroll = setTimeout(() => {
+                    window.scroll({ left: 0, top: 0 })
+                }, 1);
+                title()
+                return
+            } else {
+                clearTimeout(Scroll);
+                var links = document.createElement('div');
+                var link = document.createElement('a');
+                var br = document.createElement('br');
+                var contentTitle = document.createTextNode(linkTitle);
+                var inputValue = document.createElement('input');
+                var inputTitle = document.createElement('input');
+                inputValue.setAttribute('value', linkValue);
+                inputValue.setAttribute('name', 'inputValue');
+                inputValue.setAttribute('hidden', true);
+                inputTitle.setAttribute('value', linkTitle);
+                inputTitle.setAttribute('name', 'inputTitle');
+                inputTitle.setAttribute('hidden', true);
 
-        link.appendChild(contentTitle);
-        link.setAttribute('href', linkValue);
-        links.setAttribute('class', 'links');
-        links.appendChild(link);
-        links.appendChild(inputValue);
-        links.appendChild(inputTitle);
-        links.appendChild(br);
-        if (textareaLink) {
-            textareaLink.appendChild(links)
-        } else {
-            bodyNewDiv.appendChild(links);
+                link.appendChild(contentTitle);
+                link.setAttribute('href', linkValue);
+                links.setAttribute('class', 'links');
+                links.appendChild(link);
+                links.appendChild(inputValue);
+                links.appendChild(inputTitle);
+                links.appendChild(br);
+                if (textareaLink) {
+                    textareaLink.appendChild(links)
+                } else {
+                    bodyNewDiv.appendChild(links);
+                }
+            }
         }
-
+        title();
     }
 }
 
