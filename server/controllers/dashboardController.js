@@ -67,9 +67,6 @@ exports.dashboardViewNote = (req, res) => {
                             }
                         }
                     })
-                    if (title1 == '') {
-                        return res.status(404).render('404')
-                    }
                     const locals = {
                         paramsName: userParamsName,
                         paramsNameAdmin: paramsNameAdmin,
@@ -83,6 +80,9 @@ exports.dashboardViewNote = (req, res) => {
                         direction: direction,
                         messageSuccess: messageSuccess,
                         links: links,
+                    }
+                    if (title1 == '') {
+                        return res.status(404).render('404', { locals })
                     }
                     return res.render('dashboard/view-notes', {
                         locals,
